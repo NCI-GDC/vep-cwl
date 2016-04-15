@@ -1,0 +1,92 @@
+#!/usr/bin/env cwl-runner
+
+description: |
+  tool for getting files from s3 using aws cli
+
+requirements:
+  - import: node-engine.cwl
+  - class: ShellCommandRequirement
+  - class: InlineJavascriptRequirement
+  - class: DockerRequirement
+    dockerPull: quay.io/kmhernan/awscli-tool:latest
+  - class: EnvVarRequirement
+    envDef:
+      - envName: AWS_ACCESS_KEY_ID
+        envValue: $(inputs['aws_access_key_id'])
+      - envName: AWS_SECRET_ACCESS_KEY
+        envValue: $(inputs['aws_secret_access_key'])
+
+class: CommandLineTool
+
+inputs:
+
+  - id: "#aws_access_key_id"
+    type: string
+    label: "AWS_ACCESS_KEY_ID"
+    description: "Used to set the AWS_ACCESS_KEY_ID environmental variable for running awscli"
+
+  - id: "#aws_secret_access_key"
+    type: string
+    label: "AWS_SECRET_ACCESS_KEY"
+    description: "Used to set the AWS_SECRET_ACCESS_KEY environmental variable for running awscli"
+    
+  - id: "#endpoint_url"
+    type: string 
+    label: "Endpoint URL"
+    description: "S3 Endpoint"
+    inputBinding:
+      prefix: --endpoint-url 
+      position: 0
+
+  - id: "#s3bin"
+    type: string
+    label: "S3 URI"
+    description: "S3 URI you wish to download"
+    inputBinding:
+      position: 3
+
+outputs:
+  - id: "#out_file"
+    type: File
+    description: "s3get output file"
+    outputBinding:
+      glob: $(inputs['s3bin'].split(/[\\/]/).pop())
+
+  - id: "#log_file"
+    type: File
+    description: "log file"
+    outputBinding:
+      glob: $(inputs['s3bin'].split(/[\\/]/).pop() + '.aws_get.logs')
+
+  - id: "#time_file"
+    type: File
+    description: "time file"
+    outputBinding:
+      glob: $(inputs['s3bin'].split(/[\\/]/).pop() + '.aws_get.time')
+
+baseCommand: ["/usr/bin/time", "-v"]
+
+arguments:
+  - valueFrom: $(inputs['s3bin'].split(/[\\/]/).pop() + '.aws_get.time')
+    position: -99
+    prefix: "-o"
+
+  - valueFrom: "aws"
+    position: -98
+
+  - valueFrom: "s3"
+    position: 1 
+
+  - valueFrom: "cp"
+    position: 2 
+
+  - valueFrom: "."
+    position: 4 
+
+  - valueFrom: $(inputs['s3bin'].split(/[\\/]/).pop() + '.aws_get.logs')
+    position: 5
+    prefix: ">"
+
+  - valueFrom: '2>&1'
+    position: 6
+    shellQuote: false
