@@ -57,7 +57,7 @@ outputs:
     outputBinding:
       glob: $(inputs['output_path'] + '/' + inputs['url'].split(/[\\/]/).pop() + '.s3get.time')
 
-baseCommand: ["time"]
+baseCommand: ["/usr/bin/time", "-v"]
 
 arguments:
   - valueFrom: $(inputs['output_path'] + '/' + inputs['url'].split(/[\\/]/).pop() + '.s3get.time')
