@@ -56,10 +56,17 @@ inputs:
   - id: "#stats_file"
     type: string 
     label: "Statistics file" 
-    description: "if you want stats, the path to the output stats file (HTML is default type)" 
+    description: "the path to the output stats file (HTML is default type)" 
     default: null
     inputBinding:
         prefix: --stats_file
+
+  - id: "#no_stats"
+    type: ["null", boolean]
+    label: "No Stats" 
+    description: "if you don't want stats to be output" 
+    inputBinding:
+        prefix: --no_stats
 
   - id: "#warning_file"
     type: string 
