@@ -121,6 +121,8 @@ steps:
       - {id: "#vep.xref_refseq", valueFrom: "$(true)"}
       - {id: "#vep.total_length", valueFrom: "$(true)"}
       - {id: "#vep.allele_number", valueFrom: "$(true)"}
+      - {id: "#vep.check_alleles", valueFrom: "$(true)"}
+      - {id: "#vep.assembly", valueFrom: "$('GRCh38')"}
       - {id: "#vep.gdc_entrez", source: "#gdc_entrez"} 
       - {id: "#vep.gdc_evidence", source: "#gdc_evidence"}
     outputs:
