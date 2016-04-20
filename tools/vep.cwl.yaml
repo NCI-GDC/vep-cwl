@@ -582,18 +582,18 @@ outputs:
     type: File
     description: "stdout file"
     outputBinding:
-        glob: $(inputs['output_file'] + '.vep.logs')
+        glob: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.logs')
 
   - id: "#time_file"
     type: File
     description: "time file"
     outputBinding:
-        glob: $(inputs['output_file'] + '.vep.time')
+        glob: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.time')
 
 baseCommand: ["/usr/bin/time", "-v"]
 
 arguments:
-  - valueFrom: $(inputs['output_file'] + '.vep.time')
+  - valueFrom: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.time')
     position: -99
     prefix: "-o"
 
@@ -609,7 +609,7 @@ arguments:
   - valueFrom: "--force_overwrite"
     position: -95
 
-  - valueFrom: $(inputs['output_file'] + '.vep.logs')
+  - valueFrom: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.logs')
     position: 99 
     prefix: ">"
 

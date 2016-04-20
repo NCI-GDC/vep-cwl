@@ -12,7 +12,10 @@ inputs:
     description: "The vcf file you want to annotate"
   - id: "#vcf_id"
     type: string
-    description: "The VCF ID. This will be used for creating output files."
+    description: "The VCF ID for output files."
+  - id: "#input_vcf_id"
+    type: string
+    description: "The input VCF ID."
   - id: "#ref"
     type: File
     description: "path to tabix indexed and faidx indexed fasta file"
