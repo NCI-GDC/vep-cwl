@@ -1,0 +1,102 @@
+#!/usr/bin/env cwl-runner
+
+class: Workflow
+
+requirements:
+  - class: InlineJavascriptRequirement 
+  - class: StepInputExpressionRequirement
+
+inputs:
+  - id: "#input_vcf"
+    type: File
+    description: "The vcf file you want to annotate"
+  - id: "#vcf_id"
+    type: string
+    description: "The VCF ID. This will be used for creating output files."
+  - id: "#ref"
+    type: File
+    description: "path to tabix indexed and faidx indexed fasta file"
+  - id: "#dir_cache"
+    type: File 
+    description: "path to the cache directory"
+  - id: "#dir_plugins"
+    type: File 
+    description: "path to the plugins directory"
+  - id: "#gdc_entrez"
+    type: File 
+    description: "path to the json file for the GDC_entrez plugin"
+  - id: "#gdc_evidence"
+    type: File 
+    description: "path to the vcf file for the GDC_evidence plugin"
+  - id: "#vcf"
+    type: boolean
+    default: null
+    description: "output VCF format"
+  - id: "#json"
+    type: boolean
+    default: null
+    description: "output JSON format"
+  - id: "#tab"
+    type: boolean
+    default: null
+    description: "output TAB format"
+  - id: "#stats_file"
+    type: boolean
+    default: null
+    description: "if you want to also output the VEP stats file"
+  - id: "#fork"
+    type: int
+    default: 1
+    description: "vep threads"
+  - id: "#fields"
+    type: string
+    default: null
+    description: "configure the output format using a comma separated list of fields. Fields may be those present in the default output columns, or any of those that appear in the Extra column (including those added by plugins or custom annotations)."
+
+outputs:
+  - id: "vep_out"
+    type: File
+    source: "#vep.vep_out"
+  - id: "vep_stats"
+    type: File
+    source: "#vep.stats_file"
+  - id: "vep_log_file"
+    type: File
+    source: "#vep.log_file"
+  - id: "vep_time_file"
+    type: File
+    source: "#vep.time_file"
+
+steps:
+  - id: "#vep"
+    run: {import: ../tools/vep.cwl.yaml}
+    inputs:
+      - {id: "#vep.input_file", source: "#input_vcf"}
+      - {id: "#vep.fasta", source: "#ref"}
+      - {id: "#vep.dir_cache", source: "#dir_cache"}
+      - {id: "#vep.dir_plugins", source: "#dir_plugins"}
+      - id: "#vep.output_file"
+        source: ["#vcf_id", "#vcf", "#json", "#tab"]
+        valueFrom: "$(self[1] ? self[0] + '.vep.vcf': self[2] ? self[0] + '.vep.json': self[0] + '.vep.tsv')"
+      - {id: "#vep.vcf", source: "#vcf"}
+      - {id: "#vep.json", source: "#json"}
+      - {id: "#vep.tab", source: "#tab"}
+      - {id: "#vep.stats_file", source: ["#stats_file", "#vcf_id"], valueFrom: "$(self[0] ? self[1] + '.vep.stats.txt' : null)" }
+      - {id: "#vep.stats_text", source: "#stats_file" } 
+      - {id: "#vep.no_stats", source: "#stats_file", valueFrom: "$(self ? null : true)"}
+      - {id: "#vep.fork", source: "#fork"}
+      - {id: "#vep.no_progress", valueFrom: "$(true)"} 
+      - {id: "#vep.everything", valueFrom: "$(true)"}
+      - {id: "#vep.xref_refseq", valueFrom: "$(true)"}
+      - {id: "#vep.total_length", valueFrom: "$(true)"}
+      - {id: "#vep.allele_number", valueFrom: "$(true)"}
+      - {id: "#vep.check_alleles", valueFrom: "$(true)"}
+      - {id: "#vep.assembly", valueFrom: "$('GRCh38')"}
+      - {id: "#vep.gdc_entrez", source: "#gdc_entrez"} 
+      - {id: "#vep.gdc_evidence", source: "#gdc_evidence"}
+    outputs:
+      - id: "#vep.vep_out"
+      - id: "#vep.stats_file"
+      - id: "#vep.warning_file"
+      - id: "#vep.log_file"
+      - id: "#vep.time_file"
