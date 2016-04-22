@@ -9,7 +9,7 @@ requirements:
   - class: ShellCommandRequirement
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/vep-tool:latest 
+    dockerPull: quay.io/ncigdc/vep-tool:0.1
 
 class: CommandLineTool
 
@@ -39,8 +39,8 @@ inputs:
         prefix: --dir_cache
 
   - id: "#dir_plugins"
-    type: File
-    default: null
+    type: string 
+    default: "/home/ubuntu/tools/vep-plugins" 
     label: "specific directory for plugins" 
     description: "path to reference file"
     inputBinding:
