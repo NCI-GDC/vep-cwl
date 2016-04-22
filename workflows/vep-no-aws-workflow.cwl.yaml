@@ -13,18 +13,27 @@ inputs:
   - id: "#vcf_id"
     type: string
     description: "The VCF ID for output files."
-  - id: "#input_vcf_id"
+  - id: "#src_vcf_id"
     type: string
-    description: "The input VCF ID."
+    description: "The input (source) VCF ID."
+  - id: "#tumor_id"
+    type: string
+    default: null
+    description: "The tumor unique ID."
+  - id: "#normal_id"
+    type: string
+    default: null
+    description: "The normal unique ID."
+  - id: "#case_id"
+    type: string
+    default: null
+    description: "The case ID."
   - id: "#ref"
     type: File
     description: "path to tabix indexed and faidx indexed fasta file"
   - id: "#dir_cache"
     type: File 
     description: "path to the cache directory"
-  - id: "#dir_plugins"
-    type: File 
-    description: "path to the plugins directory"
   - id: "#gdc_entrez"
     type: File 
     description: "path to the json file for the GDC_entrez plugin"
@@ -77,7 +86,6 @@ steps:
       - {id: "#vep.input_file", source: "#input_vcf"}
       - {id: "#vep.fasta", source: "#ref"}
       - {id: "#vep.dir_cache", source: "#dir_cache"}
-      - {id: "#vep.dir_plugins", source: "#dir_plugins"}
       - id: "#vep.output_file"
         source: ["#vcf_id", "#vcf", "#json", "#tab"]
         valueFrom: "$(self[1] ? self[0] + '.vep.vcf': self[2] ? self[0] + '.vep.json': self[0] + '.vep.tsv')"
@@ -103,3 +111,14 @@ steps:
       - id: "#vep.warning_file"
       - id: "#vep.log_file"
       - id: "#vep.time_file"
+  - id: "#vep-pg"
+    run: {import: ../tools/pg_metrics.cwl.yaml}
+    inputs:
+      - {id: "#vep-pg.tool", default: "vep"}
+      - {id: "#vep-pg.time_file", source: "#vep.time_file"}
+      - {id: "#vep-pg.normal_id", source: "#normal_id"}
+      - {id: "#vep-pg.tumor_id", source: "#tumor_id"}
+      - {id: "#vep-pg.input_uuid", source: "#src_vcf_id"}
+      - {id: "#vep-pg.output_uuid", source: "#vcf_id"}
+      - {id: "#vep-pg.case_id", source: "#case_id"}
+    outputs: [] 
