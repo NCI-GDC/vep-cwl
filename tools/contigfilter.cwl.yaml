@@ -1,0 +1,164 @@
+#!/usr/bin/env cwl-runner
+
+description: |
+    description: "Filtering contigs and formatting VCF header"
+    Usage:  cwl-runner <this-file-path> options
+
+requirements:
+  - import: node-engine.cwl
+  - class: ShellCommandRequirement
+  - class: InlineJavascriptRequirement
+  - class: DockerRequirement
+    dockerPull: quay.io/ncigdc/vep-tool:0.1 
+
+class: CommandLineTool
+
+inputs:
+  - id: "#input_vcf"
+    type: File 
+    label: "Input VCF"
+    description: "Input VCF File"
+    inputBinding:
+        prefix: --input_vcf 
+
+  - id: "#output_vcf"
+    type: string 
+    label: "Output VCF"
+    description: "Path to output filtered/formatted VCF file"
+    inputBinding:
+        prefix: --output_vcf 
+
+  - id: "#patient_barcode"
+    type: string 
+    label: "Patient Barcode"
+    default: "unknown"
+    description: "Patient barcode ID"
+    inputBinding:
+        prefix: --patient_barcode 
+
+  - id: "#case_id"
+    type: string 
+    default: "unknown"
+    label: "Case UUID"
+    description: "Unique case ID"
+    inputBinding:
+        prefix: --case_id 
+
+  - id: "#tumor_barcode"
+    type: string 
+    default: "unknown"
+    label: "Tumor Barcode"
+    description: "Tumor sample barcode"
+    inputBinding:
+        prefix: --tumor_barcode
+
+  - id: "#tumor_aliquot_uuid"
+    type: string 
+    default: "unknown"
+    label: "Tumor Aliquot UUID"
+    description: "Tumor sample aliquot UUID"
+    inputBinding:
+        prefix: --tumor_aliquot_uuid
+
+  - id: "#tumor_bam_uuid"
+    type: string 
+    default: "unknown"
+    label: "Tumor BAM UUID"
+    description: "Tumor sample BAM UUID"
+    inputBinding:
+        prefix: --tumor_bam_uuid
+
+  - id: "#normal_barcode"
+    type: string 
+    default: "unknown"
+    label: "Tumor Barcode"
+    description: "Tumor sample barcode"
+    inputBinding:
+        prefix: --normal_barcode
+
+  - id: "#normal_aliquot_uuid"
+    type: string 
+    default: "unknown"
+    label: "Tumor Aliquot UUID"
+    description: "Tumor sample aliquot UUID"
+    inputBinding:
+        prefix: --normal_aliquot_uuid
+
+  - id: "#normal_bam_uuid"
+    type: string 
+    default: "unknown"
+    label: "Tumor BAM UUID"
+    description: "Tumor sample BAM UUID"
+    inputBinding:
+        prefix: --normal_bam_uuid
+
+  - id: "#vcf_source"
+    type: string 
+    label: "VCF Source"
+    description: "VCF source: MuTect2, VarScan2, MuSE, or SomaticSniper"
+    inputBinding:
+        prefix: --vcf_source
+
+  - id: "#fai"
+    type: File
+    default: null 
+    label: "Fai"
+    description: "The FAI file containing the contigs you want to keep. Default is already in docker"
+    inputBinding:
+        prefix: --fai
+
+  - id: "#assembly"
+    type: string 
+    default: "GRCh38.d1.vd1.fa" 
+    label: "Assembly"
+    description: "The assembly name to use in VCF header"
+    inputBinding:
+        prefix: --assembly
+
+  - id: "#reference"
+    type: string 
+    default: "GRCh38.d1.vd1.fa.fai" 
+    label: "Reference Name"
+    description: "The reference fasta name to use in VCF header" 
+    inputBinding:
+        prefix: --reference
+
+outputs:
+  - id: "#vcf_out"
+    type: File
+    description: "Contig filtered and header reformatted VCF file"
+    outputBinding:
+        glob: $(inputs['output_vcf'])
+
+  - id: "#log_file"
+    type: File
+    description: "log file"
+    outputBinding:
+        glob: $(inputs['output_vcf'].substr(0, inputs['output_vcf'].lastIndexOf('.')) + '.logs')
+
+  - id: "#time_file"
+    type: File
+    description: "time file"
+    outputBinding:
+        glob: $(inputs['output_vcf'].substr(0, inputs['output_vcf'].lastIndexOf('.')) + '.time')
+
+baseCommand: ["/usr/bin/time", "-v"]
+
+arguments:
+  - valueFrom: $(inputs['output_vcf'].substr(0, inputs['output_vcf'].lastIndexOf('.')) + '.time')
+    position: -99
+    prefix: "-o"
+
+  - valueFrom: "/home/ubuntu/.virtualenvs/p3/bin/python" 
+    position: -98
+
+  - valueFrom: "/home/ubuntu/tools/vep-tool/contig-filter/ContigFilter.py"
+    position: -97
+
+  - valueFrom: $(inputs['output_vcf'].substr(0, inputs['output_vcf'].lastIndexOf('.')) + '.logs')
+    position: 99
+    prefix: ">"
+
+  - valueFrom: '2>&1'
+    position: 100
+    shellQuote: false
