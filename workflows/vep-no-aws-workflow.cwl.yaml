@@ -13,6 +13,9 @@ inputs:
   - id: "#host"
     type: string 
     description: "postgres host name"
+  - id: "#vcf_source"
+    type: string 
+    description: "MuTect2, VarScan2, MuSE, or SomaticSniper"
   - id: "#input_vcf"
     type: File
     description: "The vcf file you want to annotate"
@@ -22,18 +25,38 @@ inputs:
   - id: "#src_vcf_id"
     type: string
     description: "The input (source) VCF ID."
-  - id: "#tumor_id"
-    type: string
-    default: null
-    description: "The tumor unique ID."
-  - id: "#normal_id"
-    type: string
-    default: null
-    description: "The normal unique ID."
   - id: "#case_id"
     type: string
     default: null
     description: "The case ID."
+  - id: "#patient_barcode"
+    type: string
+    default: null
+    description: "The patient barcode."
+  - id: "#tumor_barcode"
+    type: string
+    default: null
+    description: "The tumor sample barcode."
+  - id: "#tumor_aliquot_uuid"
+    type: string
+    default: null
+    description: "The tumor sample barcode."
+  - id: "#tumor_bam_uuid"
+    type: string
+    default: null
+    description: "The tumor BAM unique ID."
+  - id: "#normal_barcode"
+    type: string
+    default: null
+    description: "The normal sample barcode."
+  - id: "#normal_aliquot_uuid"
+    type: string
+    default: null
+    description: "The normal sample barcode."
+  - id: "#normal_bam_uuid"
+    type: string
+    default: null
+    description: "The normal BAM unique ID."
   - id: "#ref"
     type: File
     description: "path to tabix indexed and faidx indexed fasta file"
@@ -86,10 +109,41 @@ outputs:
     source: "#vep.time_file"
 
 steps:
+  - id: "#contig-filter"
+    run: {import: ../tools/contigfilter.cwl.yaml}
+    inputs:
+      - {id: "#contig-filter.input_vcf", source: "#input_vcf"}
+      - {id: "#contig-filter.output_vcf", source: "#vcf_id", valueFrom: "$(self + '.contig_filter.vcf')"}
+      - {id: "#contig-filter.patient_barcode", source: "#patient_barcode"}
+      - {id: "#contig-filter.case_id", source: "#case_id"}
+      - {id: "#contig-filter.tumor_barcode", source: "#tumor_barcode"}
+      - {id: "#contig-filter.tumor_aliquot_uuid", source: "#tumor_aliquot_uuid"}
+      - {id: "#contig-filter.tumor_bam_uuid", source: "#tumor_bam_uuid"}
+      - {id: "#contig-filter.normal_barcode", source: "#normal_barcode"}
+      - {id: "#contig-filter.normal_aliquot_uuid", source: "#normal_aliquot_uuid"}
+      - {id: "#contig-filter.normal_bam_uuid", source: "#normal_bam_uuid"}
+      - {id: "#contig-filter.vcf_source", source: "#vcf_source"}
+    outputs:
+      - id: "#contig-filter.vcf_out"
+      - id: "#contig-filter.log_file"
+      - id: "#contig-filter.time_file"
+  - id: "#contig-filter-pg"
+    run: {import: ../tools/pg_metrics.cwl.yaml}
+    inputs:
+      - {id: "#contig-filter-pg.tool", default: "contigfilter"}
+      - {id: "#contig-filter-pg.time_file", source: "#contig-filter.time_file"}
+      - {id: "#contig-filter-pg.normal_id", source: "#normal_bam_uuid"}
+      - {id: "#contig-filter-pg.tumor_id", source: "#tumor_bam_uuid"}
+      - {id: "#contig-filter-pg.input_uuid", source: "#src_vcf_id"}
+      - {id: "#contig-filter-pg.output_uuid", source: "#vcf_id"}
+      - {id: "#contig-filter-pg.case_id", source: "#case_id"}
+      - {id: "#contig-filter-pg.postgres_config", source: "#postgres_config"}
+      - {id: "#contig-filter-pg.host", source: "#host"}
+    outputs: []
   - id: "#vep"
     run: {import: ../tools/vep.cwl.yaml}
     inputs:
-      - {id: "#vep.input_file", source: "#input_vcf"}
+      - {id: "#vep.input_file", source: "#contig-filter.vcf_out"}
       - {id: "#vep.fasta", source: "#ref"}
       - {id: "#vep.dir_cache", source: "#dir_cache"}
       - id: "#vep.output_file"
@@ -122,11 +176,11 @@ steps:
     inputs:
       - {id: "#vep-pg.tool", default: "vep"}
       - {id: "#vep-pg.time_file", source: "#vep.time_file"}
-      - {id: "#vep-pg.normal_id", source: "#normal_id"}
-      - {id: "#vep-pg.tumor_id", source: "#tumor_id"}
+      - {id: "#vep-pg.normal_id", source: "#normal_bam_uuid"}
+      - {id: "#vep-pg.tumor_id", source: "#tumor_bam_uuid"}
       - {id: "#vep-pg.input_uuid", source: "#src_vcf_id"}
       - {id: "#vep-pg.output_uuid", source: "#vcf_id"}
       - {id: "#vep-pg.case_id", source: "#case_id"}
       - {id: "#vep-pg.postgres_config", source: "#postgres_config"}
       - {id: "#vep-pg.host", source: "#host"}
-    outputs: [] 
+    outputs: []
