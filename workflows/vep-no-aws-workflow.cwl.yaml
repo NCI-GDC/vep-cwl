@@ -7,6 +7,12 @@ requirements:
   - class: StepInputExpressionRequirement
 
 inputs:
+  - id: "#postgres_config"
+    type: File
+    description: "postgres config file"
+  - id: "#host"
+    type: string 
+    description: "postgres host name"
   - id: "#input_vcf"
     type: File
     description: "The vcf file you want to annotate"
@@ -121,4 +127,6 @@ steps:
       - {id: "#vep-pg.input_uuid", source: "#src_vcf_id"}
       - {id: "#vep-pg.output_uuid", source: "#vcf_id"}
       - {id: "#vep-pg.case_id", source: "#case_id"}
+      - {id: "#vep-pg.postgres_config", source: "#postgres_config"}
+      - {id: "#vep-pg.host", source: "#host"}
     outputs: [] 

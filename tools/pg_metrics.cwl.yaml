@@ -66,6 +66,29 @@ inputs:
     inputBinding:
         prefix: --case_id 
 
+  - id: "#host"
+    type: string 
+    default: "pgreadwrite.osdc.io"
+    label: "Host"
+    description: "hostname for db"
+    inputBinding:
+        prefix: --host 
+
+  - id: "#database"
+    type: string 
+    default: "prod_bioinfo"
+    label: "Database"
+    description: "name of the database"
+    inputBinding:
+        prefix: --database 
+
+  - id: "#postgres_config"
+    type: File 
+    label: "Postgres Config"
+    description: "postgres config file"
+    inputBinding:
+        prefix: --postgres_config 
+
 outputs: []
 
 baseCommand: ["/home/ubuntu/.virtualenvs/p3/bin/python", "/home/ubuntu/tools/vep-tool/main.py"]
