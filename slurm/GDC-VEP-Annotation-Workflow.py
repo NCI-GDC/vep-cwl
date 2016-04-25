@@ -10,6 +10,9 @@ import sys
 import utils.s3
 import utils.pipeline
 
+import postgres.status
+from sqlalchemy.exc import NoSuchTableError
+
 def run_stage_cache(args):
     '''
     Pulls the VEP cache files from s3
@@ -67,10 +70,35 @@ def run_build_slurm_scripts(args):
     # Time
     start = time.time()
 
+    # Check paths
+    if not os.path.isdir(args.outdir):
+        raise Exception("Cannot find output directory: %s" %args.outdir)
+
+    if not os.path.isfile(args.config):
+        raise Exception("Cannot find config file: %s" %args.config)
+
     # Setup logger
     logger = utils.pipeline.setup_logging(logging.INFO, 'VEPslurm', args.log_file)
 
-    #  
+    # Database setup
+    s = open(args.config, 'r').read()
+    config = eval(s)
+
+    DATABASE = {
+        'drivername': 'postgres',
+        'host': 'pgreadwrite.osdc.io',
+        'port': '5432',
+        'username': config['username'],
+        'password': config['password'],
+        'database': 'prod_bioinfo'
+    }
+
+    engine = postgres.status.db_connect(DATABASE)
+
+    try:
+        cases = postgres.status.get_vep_inputs(engine, 'vep_cwl_status')
+    except NoSuchTableError:
+        print "HERE" 
 
 def get_args():
     # Main parser
@@ -90,6 +118,7 @@ def get_args():
 
     # Build slurm scripts
     p_slurm = sp.add_parser('slurm', help='Options for building slurm scripts. This should be the second step.')
+    p_slurm.add_argument('--config', required=True, help='Path to the postgres config file')
     p_slurm.add_argument('--cache_dir', required=True, help='Path to the directory containing the VEP cache files')
     p_slurm.add_argument('--thread_count', required=True, help='number of threads to use')
     p_slurm.add_argument('--mem', required=True, help='mem for each node')
