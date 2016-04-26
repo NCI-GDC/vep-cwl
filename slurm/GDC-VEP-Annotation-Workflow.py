@@ -140,7 +140,8 @@ def write_slurm_script(cases, args, template_str):
                 NORMAL_ALIQUOT_UUID = dat.normal_aliquot_id,
                 NORMAL_BAM_UUID     = dat.normal_bam_gdcid,
                 REFDIR              = args.refdir,
-                S3DIR               = args.s3dir
+                S3DIR               = args.s3dir,
+                BASEDIR             = args.run_basedir
             )
 
             with open(slurm, 'w') as o:
@@ -313,7 +314,8 @@ def get_args():
     p_slurm.add_argument('--thread_count', required=True, help='number of threads to use')
     p_slurm.add_argument('--mem', required=True, help='mem for each node')
     p_slurm.add_argument('--outdir', default="./", help='output directory for slurm scripts [./]')
-    p_slurm.add_argument('--s3dir', default="s3://ceph_vep", help='s3bin for output files [s3://vep_annotation/]')
+    p_slurm.add_argument('--s3dir', default="s3://ceph_vep", help='s3bin for output files [s3://ceph_vep/]')
+    p_slurm.add_argument('--run_basedir', default="/mnt/SCRATCH", help='basedir for cwl runs')
     p_slurm.add_argument('--log_file', type=str, help='If you want to write the logs to a file. By default stdout')
 
     # Args

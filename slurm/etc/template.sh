@@ -28,8 +28,9 @@ refdir="{REFDIR}"
 
 # Outputs
 s3dir="{S3DIR}"
+basedir="{BASEDIR}"
 repository="git@github.com:NCI-GDC/vep-cwl.git"
-wkdir=`sudo mktemp -d vep.XXXXXXXXXX -p /mnt/SCRATCH/`
+wkdir=`sudo mktemp -d vep.XXXXXXXXXX -p $basedir`
 sudo chown ubuntu:ubuntu $wkdir
 
 cd $wkdir
