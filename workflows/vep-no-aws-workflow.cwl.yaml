@@ -95,6 +95,9 @@ inputs:
     description: "configure the output format using a comma separated list of fields. Fields may be those present in the default output columns, or any of those that appear in the Extra column (including those added by plugins or custom annotations)."
 
 outputs:
+  - id: "contig_filter_log_file"
+    type: File
+    source: "#contig-filter.log_file"
   - id: "vep_out"
     type: File
     source: "#vep.vep_out"
@@ -104,9 +107,6 @@ outputs:
   - id: "vep_log_file"
     type: File
     source: "#vep.log_file"
-  - id: "vep_time_file"
-    type: File
-    source: "#vep.time_file"
 
 steps:
   - id: "#contig-filter"

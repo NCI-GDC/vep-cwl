@@ -5,15 +5,28 @@
 #SBATCH --workdir="/mnt/SCRATCH/"
 #SBATCH --mem={MEM}
 
-refdir="{REFDIR}"
+# Runtime
 thread_count="{THREAD_COUNT}"
 
-normal="{NORMAL}"
-tumor="{TUMOR}"
-normal_id="{NORMAL_ID}"
-tumor_id="{TUMOR_ID}"
+# IDS
+vcf_source="{VCF_SOURCE}"
+src_vcf_id="{SRC_VCF_ID}"
 case_id="{CASE_ID}"
+patient_barcode="{PATIENT_BARCODE}"
+tumor_barcode="{TUMOR_BARCODE}"
+tumor_aliquot_uuid="{TUMOR_ALIQUOT_UUID}"
+tumor_bam_uuid="{TUMOR_BAM_UUID}"
+normal_barcode="{NORMAL_BARCODE}"
+normal_aliquot_uuid="{NORMAL_ALIQUOT_UUID}"
+normal_bam_uuid="{NORMAL_BAM_UUID}"
 
+# Input
+input_vcf="{INPUT_VCF}"
+
+# Reference DB
+refdir="{REFDIR}"
+
+# Outputs
 s3dir="{S3DIR}"
 repository="git@github.com:NCI-GDC/vep-cwl.git"
 wkdir=`sudo mktemp -d vep.XXXXXXXXXX -p /mnt/SCRATCH/`
@@ -31,17 +44,20 @@ sudo chown ubuntu:ubuntu -R vep-cwl
 
 trap cleanup EXIT
 
-/home/ubuntu/.virtualenvs/p2/bin/python vep-cwl/slurm/run_cwl.py \
---refdir $refdir \
---block $block \
---thread_count $thread_count \
---java_heap $java_heap \
---contEst $contEst \
---normal $normal \
---normal_id $normal_id \
---tumor $tumor \
---tumor_id $tumor_id \
---case_id $case_id \
+/home/ubuntu/.virtualenvs/p2/bin/python vep-cwl/slurm/GDC-VEP-Annotation-Workflow.py run \
 --basedir $wkdir \
+--refdir $refdir \
+--vcf_source $vcf_source \
+--input_vcf $input_vcf \
+--src_vcf_id $src_vcf_id \
+--case_id $case_id \
+--patient_barcode $patient_barcode \
+--tumor_barcode $tumor_barcode \
+--tumor_aliquot_uuid $tumor_aliquot_uuid \
+--tumor_bam_uuid $tumor_bam_uuid \
+--normal_barcode $normal_barcode \
+--normal_aliquot_uuid $normal_aliquot_uuid \
+--normal_bam_uuid $normal_bam_uuid \
+--fork $thread_count \
 --s3dir $s3dir \
---cwl $wkdir/mutect-cwl/workflows/mutect2-vc-workflow.cwl.yaml
+--cwl $wkdir/vep-cwl/workflows/vep-no-aws-workflow.cwl.yaml

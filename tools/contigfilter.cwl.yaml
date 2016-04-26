@@ -109,7 +109,7 @@ inputs:
 
   - id: "#assembly"
     type: string 
-    default: "GRCh38.d1.vd1.fa" 
+    default: "GRCh38.d1.vd1" 
     label: "Assembly"
     description: "The assembly name to use in VCF header"
     inputBinding:
@@ -117,7 +117,7 @@ inputs:
 
   - id: "#reference"
     type: string 
-    default: "GRCh38.d1.vd1.fa.fai" 
+    default: "GRCh38.d1.vd1.fa" 
     label: "Reference Name"
     description: "The reference fasta name to use in VCF header" 
     inputBinding:

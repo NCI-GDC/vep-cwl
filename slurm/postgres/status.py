@@ -71,7 +71,10 @@ class State(object):
 class Files(object):
     pass
 
-def get_all_vep_inputs(engine, inputs_table='vcf_inputs'):
+def get_all_vep_inputs(engine, inputs_table='vep_input'):
+    '''
+    Gets all the input files when the status table is not present.
+    '''
 
     Session = sessionmaker()
     Session.configure(bind=engine)
@@ -80,49 +83,27 @@ def get_all_vep_inputs(engine, inputs_table='vcf_inputs'):
     meta = MetaData(engine)
 
     #read the status table
-    state = Table(inputs_table, meta, autoload=True)
+    files = Table(inputs_table, meta, 
+                  Column("src_vcf_id", String, primary_key=True),
+                  autoload=True)
 
-    mapper(State, state)
+    mapper(Files, files)
 
-    data = Table('vep_input', meta,
-                 Column("tumor_bam_gdcid", String, primary_key=True),
-                 Column("normal_bam_gdcid", String, primary_key=True),
-                 autoload=True)
-
-    mapper(Files, data)
     count = 0
     s = dict()
 
     cases = session.query(Files).all()
 
     for row in cases:
-
-        tnpair = [row.normal_gdc_id, row.tumor_gdc_id]
-
-        completion = session.query(State).filter(State.files == cast(tnpair, ARRAY(String))).all()
-
-        rexecute = True
-
-        for comp_case in completion:
-
-            if not comp_case == None:
-                if comp_case.status == 'COMPLETED':
-                    rexecute = False
-
-        if rexecute:
-
-            #s[count] = [row.case_id,
-            #            row.normal_gdc_id,
-            #            row.normal_s3_url,
-            #            row.tumor_gdc_id,
-            #            row.tumor_s3_url]
-            s[count] = row 
-            count += 1
+        s[count] = row 
+        count += 1
 
     return s
 
 def get_vep_inputs_from_status(engine, status_table):
-
+    '''
+    Gets the incompleted input files when the status table is present.
+    '''
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
@@ -135,8 +116,7 @@ def get_vep_inputs_from_status(engine, status_table):
     mapper(State, state)
 
     data = Table('vep_input', meta,
-                 Column("tumor_bam_gdcid", String, primary_key=True),
-                 Column("normal_bam_gdcid", String, primary_key=True),
+                 Column("src_vcf_id", String, primary_key=True),
                  autoload=True)
 
     mapper(Files, data)
@@ -147,26 +127,17 @@ def get_vep_inputs_from_status(engine, status_table):
 
     for row in cases:
 
-        tnpair = [row.normal_gdc_id, row.tumor_gdc_id]
-
-        completion = session.query(State).filter(State.files == cast(tnpair, ARRAY(String))).all()
+        completion = session.query(State).filter(State.src_vcf_id == row.src_vcf_id).all()
 
         rexecute = True
 
         for comp_case in completion:
-
             if not comp_case == None:
                 if comp_case.status == 'COMPLETED':
                     rexecute = False
 
         if rexecute:
-
-            #s[count] = [row.case_id,
-            #            row.normal_gdc_id,
-            #            row.normal_s3_url,
-            #            row.tumor_gdc_id,
-            #            row.tumor_s3_url]
             s[count] = row 
             count += 1
-
+    
     return s

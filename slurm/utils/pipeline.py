@@ -1,6 +1,8 @@
 import sys
 import subprocess
 import logging
+import os
+import shutil
 
 def run_command(cmd, logger=None, shell_var=False):
     '''
@@ -47,3 +49,11 @@ def targz_decompress(logger, filename, cmd_prefix=['tar', '-xzf']):
     exit_code = run_command(cmd, logger=logger)
 
     return exit_code
+
+def remove_dir(dirname):
+    """ Remove a directory and all it's contents """
+
+    if os.path.isdir(dirname):
+        shutil.rmtree(dirname)
+    else:
+        raise Exception("Invalid directory: %s" % dirname)
