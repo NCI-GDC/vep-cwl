@@ -127,19 +127,6 @@ steps:
       - id: "#contig-filter.vcf_out"
       - id: "#contig-filter.log_file"
       - id: "#contig-filter.time_file"
-  - id: "#contig-filter-pg"
-    run: {import: ../tools/pg_metrics.cwl.yaml}
-    inputs:
-      - {id: "#contig-filter-pg.tool", default: "contigfilter"}
-      - {id: "#contig-filter-pg.time_file", source: "#contig-filter.time_file"}
-      - {id: "#contig-filter-pg.normal_id", source: "#normal_bam_uuid"}
-      - {id: "#contig-filter-pg.tumor_id", source: "#tumor_bam_uuid"}
-      - {id: "#contig-filter-pg.input_uuid", source: "#src_vcf_id"}
-      - {id: "#contig-filter-pg.output_uuid", source: "#vcf_id"}
-      - {id: "#contig-filter-pg.case_id", source: "#case_id"}
-      - {id: "#contig-filter-pg.postgres_config", source: "#postgres_config"}
-      - {id: "#contig-filter-pg.host", source: "#host"}
-    outputs: []
   - id: "#vep"
     run: {import: ../tools/vep.cwl.yaml}
     inputs:
