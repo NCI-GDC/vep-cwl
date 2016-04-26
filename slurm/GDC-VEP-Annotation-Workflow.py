@@ -285,7 +285,7 @@ def run_cwl(args):
 
     #remove work and input directories
     logger.info("Removing files")
-    #utils.pipeline.remove_dir(uniqdir)
+    utils.pipeline.remove_dir(uniqdir)
 
 def get_args():
     '''
