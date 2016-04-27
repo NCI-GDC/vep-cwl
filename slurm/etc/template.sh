@@ -2,7 +2,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task={THREAD_COUNT}
 #SBATCH --ntasks=1
-#SBATCH --workdir="/mnt/SCRATCH/"
+#SBATCH --workdir={BASEDIR}
 #SBATCH --mem={MEM}
 
 # Runtime
