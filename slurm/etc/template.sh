@@ -9,7 +9,6 @@
 thread_count="{THREAD_COUNT}"
 
 # IDS
-vcf_source="{VCF_SOURCE}"
 src_vcf_id="{SRC_VCF_ID}"
 case_id="{CASE_ID}"
 patient_barcode="{PATIENT_BARCODE}"
@@ -19,17 +18,10 @@ tumor_bam_uuid="{TUMOR_BAM_UUID}"
 normal_barcode="{NORMAL_BARCODE}"
 normal_aliquot_uuid="{NORMAL_ALIQUOT_UUID}"
 normal_bam_uuid="{NORMAL_BAM_UUID}"
-caller_workflow_id='"{CALLER_WORKFLOW_ID}"'
-caller_workflow_name='"{CALLER_WORKFLOW_NAME}"'
-caller_workflow_description='"{CALLER_WORKFLOW_DESCRIPTION}"'
-caller_workflow_version="{CALLER_WORKFLOW_VERSION}"
-annotation_workflow_id='"{ANNOTATION_WORKFLOW_ID}"'
-annotation_workflow_name='"{ANNOTATION_WORKFLOW_NAME}"'
-annotation_workflow_description='"{ANNOTATION_WORKFLOW_DESCRIPTION}"'
-annotation_workflow_version="{ANNOTATION_WORKFLOW_VERSION}"
 
 # Input
 input_vcf="{INPUT_VCF}"
+object_store="{OBJECT_STORE}"
 
 # Reference DB
 refdir="{REFDIR}"
@@ -56,8 +48,8 @@ trap cleanup EXIT
 /home/ubuntu/.virtualenvs/p2/bin/python vep-cwl/slurm/GDC-VEP-Annotation-Workflow.py run \
 --basedir $wkdir \
 --refdir $refdir \
---vcf_source $vcf_source \
 --input_vcf $input_vcf \
+--object_store $object_store \
 --src_vcf_id $src_vcf_id \
 --case_id $case_id \
 --patient_barcode $patient_barcode \
@@ -67,14 +59,14 @@ trap cleanup EXIT
 --normal_barcode $normal_barcode \
 --normal_aliquot_uuid $normal_aliquot_uuid \
 --normal_bam_uuid $normal_bam_uuid \
---caller_workflow_id $caller_workflow_id \
---caller_workflow_name $caller_workflow_name \
---caller_workflow_description $caller_workflow_description \
---caller_workflow_version $caller_workflow_version \
---annotation_workflow_id $annotation_workflow_id \
---annotation_workflow_name $annotation_workflow_name \
---annotation_workflow_description $annotation_workflow_description \
---annotation_workflow_version $annotation_workflow_version \
+--caller_workflow_id "{CALLER_WORKFLOW_ID}" \
+--caller_workflow_name "{CALLER_WORKFLOW_NAME}" \
+--caller_workflow_description "{CALLER_WORKFLOW_DESCRIPTION}" \
+--caller_workflow_version "{CALLER_WORKFLOW_VERSION}" \
+--annotation_workflow_id "{ANNOTATION_WORKFLOW_ID}" \
+--annotation_workflow_name "{ANNOTATION_WORKFLOW_NAME}" \
+--annotation_workflow_description "{ANNOTATION_WORKFLOW_DESCRIPTION}" \
+--annotation_workflow_version "{ANNOTATION_WORKFLOW_VERSION}" \
 --fork $thread_count \
 --s3dir $s3dir \
 --cwl $wkdir/vep-cwl/workflows/vep-workflow.cwl.yaml

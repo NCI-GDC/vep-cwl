@@ -3,6 +3,7 @@ import subprocess
 import logging
 import os
 import shutil
+import hashlib
 
 def run_command(cmd, logger=None, shell_var=False):
     '''
@@ -57,3 +58,19 @@ def remove_dir(dirname):
         shutil.rmtree(dirname)
     else:
         raise Exception("Invalid directory: %s" % dirname)
+
+def get_file_size(filename):
+    ''' Gets file size '''
+    fstats = os.stat(filename)
+    return fstats.st_size
+
+def get_md5(input_file):
+    '''Estimates md5 of file '''
+    BLOCKSIZE = 65536
+    hasher = hashlib.md5()
+    with open(input_file, 'rb') as afile:
+        buf = afile.read(BLOCKSIZE)
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(BLOCKSIZE)
+    return hasher.hexdigest()
