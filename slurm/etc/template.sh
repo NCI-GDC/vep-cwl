@@ -19,6 +19,14 @@ tumor_bam_uuid="{TUMOR_BAM_UUID}"
 normal_barcode="{NORMAL_BARCODE}"
 normal_aliquot_uuid="{NORMAL_ALIQUOT_UUID}"
 normal_bam_uuid="{NORMAL_BAM_UUID}"
+caller_workflow_id='"{CALLER_WORKFLOW_ID}"'
+caller_workflow_name='"{CALLER_WORKFLOW_NAME}"'
+caller_workflow_description='"{CALLER_WORKFLOW_DESCRIPTION}"'
+caller_workflow_version="{CALLER_WORKFLOW_VERSION}"
+annotation_workflow_id='"{ANNOTATION_WORKFLOW_ID}"'
+annotation_workflow_name='"{ANNOTATION_WORKFLOW_NAME}"'
+annotation_workflow_description='"{ANNOTATION_WORKFLOW_DESCRIPTION}"'
+annotation_workflow_version="{ANNOTATION_WORKFLOW_VERSION}"
 
 # Input
 input_vcf="{INPUT_VCF}"
@@ -59,6 +67,14 @@ trap cleanup EXIT
 --normal_barcode $normal_barcode \
 --normal_aliquot_uuid $normal_aliquot_uuid \
 --normal_bam_uuid $normal_bam_uuid \
+--caller_workflow_id $caller_workflow_id \
+--caller_workflow_name $caller_workflow_name \
+--caller_workflow_description $caller_workflow_description \
+--caller_workflow_version $caller_workflow_version \
+--annotation_workflow_id $annotation_workflow_id \
+--annotation_workflow_name $annotation_workflow_name \
+--annotation_workflow_description $annotation_workflow_description \
+--annotation_workflow_version $annotation_workflow_version \
 --fork $thread_count \
 --s3dir $s3dir \
---cwl $wkdir/vep-cwl/workflows/vep-no-aws-workflow.cwl.yaml
+--cwl $wkdir/vep-cwl/workflows/vep-workflow.cwl.yaml
