@@ -89,6 +89,21 @@ inputs:
     inputBinding:
         prefix: --postgres_config 
 
+  - id: "#input_file"
+    type: File 
+    default: null
+    label: "Input File"
+    description: "Path to input file for md5"
+    inputBinding:
+        prefix: --input_file 
+
+  - id: "#stats_file"
+    type: File 
+    default: null
+    label: "VEP Stats File"
+    description: "Path to stats file for VEP metrics"
+    inputBinding:
+        prefix: --stats_file 
 outputs: []
 
-baseCommand: ["/home/ubuntu/.virtualenvs/p3/bin/python", "/home/ubuntu/tools/vep-tool/main.py"]
+baseCommand: ["/home/ubuntu/.virtualenvs/p3/bin/python", "/home/ubuntu/tools/vep-tool/main.py", "postgres"]
