@@ -7,7 +7,7 @@ description: |
 requirements:
   - import: node-engine.cwl
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/vep-tool:0.1 
+    dockerPull: quay.io/ncigdc/vep-tool:0.1b 
 
 class: CommandLineTool
 
