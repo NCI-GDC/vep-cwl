@@ -104,6 +104,15 @@ inputs:
     description: "Path to stats file for VEP metrics"
     inputBinding:
         prefix: --stats_file 
+
+  - id: "#hostname"
+    type: string 
+    default: "UNKNOWN" 
+    label: "Runtime host name"
+    description: "Runtime environment host name for metrics table"
+    inputBinding:
+        prefix: --hostname 
+
 outputs: []
 
 baseCommand: ["/home/ubuntu/.virtualenvs/p3/bin/python", "/home/ubuntu/tools/vep-tool/main.py", "postgres"]

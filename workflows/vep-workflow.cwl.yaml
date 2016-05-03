@@ -13,6 +13,10 @@ inputs:
   - id: "#host"
     type: string 
     description: "postgres host name"
+  - id: "#run_hostname"
+    type: string 
+    default: "UNKNOWN"
+    description: "running environment hostname"
   - id: "#input_vcf"
     type: File
     description: "The vcf file you want to annotate"
@@ -216,4 +220,5 @@ steps:
       - {id: "#vep-pg.host", source: "#host"}
       - {id: "#vep-pg.input_file", source: "#vcf-reheader.vcf_out"}
       - {id: "#vep-pg.stats_file", source: "#vep.stats_file"}
+      - {id: "#vep-pg.hostname", source: "#run_hostname"}
     outputs: []

@@ -271,6 +271,7 @@ def run_cwl(args):
                 args.cwl,
                 "--postgres_config", pg_config,
                 "--host", args.host,
+                "--run_hostname", hostname,
                 "--input_vcf", input_vcf, 
                 "--vcf_id", str(vcf_uuid),
                 "--src_vcf_id", args.src_vcf_id,
