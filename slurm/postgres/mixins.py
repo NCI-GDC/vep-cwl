@@ -16,6 +16,7 @@ class StatusTypeMixin(object):
     location     = Column(String)
     datetime_now = Column(String)
     md5          = Column(String)
+    hostname     = Column(String)
 
     def __repr__(self):
         return "<StatusTypeMixin(case_id='%s', status='%s' , location='%s'>" %(self.case_id,
@@ -32,6 +33,7 @@ class TimeTypeMixin(object):
     elapsed      = Column(String)
     thread_count = Column(String)
     status       = Column(String)
+    hostname     = Column(String)
 
     def __repr__(self):
         return "<TimeToolTypeMixin(case_id='%s', elapsed='%s', status='%s'>" %(self.case_id,

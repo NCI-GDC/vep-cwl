@@ -11,6 +11,7 @@ import tempfile
 import utils.s3
 import utils.pipeline
 import datetime
+import socket
 
 import postgres.status
 import postgres.utils
@@ -160,11 +161,15 @@ def run_cwl(args):
     inp     = tempfile.mkdtemp(prefix="input_", dir=uniqdir)
     index   = args.refdir
 
+    # get hostname
+    hostname = socket.gethostname()
+
     #setup logger
     log_file = os.path.join(workdir, "%s.vep.cwl.log" %str(vcf_uuid))
     logger = utils.pipeline.setup_logging(logging.INFO, str(vcf_uuid), log_file)
 
     #logging inputs
+    logger.info("hostname: %s" %(hostname))
     logger.info("normal_barcode: %s" %(args.normal_barcode))
     logger.info("normal_aliquot_uuid: %s" %(args.normal_aliquot_uuid))
     logger.info("normal_bam_uuid: %s" %(args.normal_bam_uuid))
@@ -212,7 +217,7 @@ def run_cwl(args):
         engine = postgres.utils.get_db_engine(pg_config)
         postgres.status.set_download_error(s3_exit_code, args.case_id, str(vcf_uuid), 
             args.src_vcf_id, [args.normal_bam_uuid, args.tumor_bam_uuid],
-            args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, logger)
+            args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, logger, hostname)
 
         #remove work and input directories
         logger.info("Removing files")
@@ -228,14 +233,30 @@ def run_cwl(args):
         engine = postgres.utils.get_db_engine(pg_config)
         postgres.status.set_download_error(s3_exit_code, args.case_id, str(vcf_uuid), 
             args.src_vcf_id, [args.normal_bam_uuid, args.tumor_bam_uuid],
-            args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, logger)
+            args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, logger, hostname)
 
         #remove work and input directories
         logger.info("Removing files")
         utils.pipeline.remove_dir(uniqdir)
 
         # Exit
-        sys.exit()
+        sys.exit(1)
+
+    # If vcf file has no variants
+    elif utils.pipeline.has_variants_check(input_vcf):
+        cwl_end     = time.time()
+        cwl_elapsed = cwl_end - cwl_start
+        engine = postgres.utils.get_db_engine(pg_config)
+        postgres.status.set_no_input_variants_error(args.case_id, str(vcf_uuid), 
+            args.src_vcf_id, [args.normal_bam_uuid, args.tumor_bam_uuid],
+            args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, logger, hostname)
+
+        #remove work and input directories
+        logger.info("Removing files")
+        utils.pipeline.remove_dir(uniqdir)
+
+        # Exit
+        sys.exit(1)
 
     # Run CWL
     else:
@@ -311,7 +332,8 @@ def run_cwl(args):
                    files = [args.normal_bam_uuid, args.tumor_bam_uuid],
                    elapsed = cwl_elapsed,
                    thread_count = str(args.fork),
-                   status = str(status))
+                   status = str(status),
+                   hostname = hostname)
 
         postgres.utils.create_table(engine, met)
         postgres.utils.add_metrics(engine, met)
@@ -325,7 +347,7 @@ def run_cwl(args):
         logger.info("Updating status")
         postgres.status.add_status(engine, args.case_id, str(vcf_uuid), args.src_vcf_id,  
                                   [args.normal_bam_uuid, args.tumor_bam_uuid], status, 
-                                  loc, datetime_now, md5)
+                                  loc, datetime_now, md5, hostname)
 
         #remove work and input directories
         logger.info("Removing files")
