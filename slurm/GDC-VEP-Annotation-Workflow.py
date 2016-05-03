@@ -243,7 +243,7 @@ def run_cwl(args):
         sys.exit(1)
 
     # If vcf file has no variants
-    elif utils.pipeline.has_variants_check(input_vcf):
+    elif not utils.pipeline.has_variants_check(input_vcf):
         cwl_end     = time.time()
         cwl_elapsed = cwl_end - cwl_start
         engine = postgres.utils.get_db_engine(pg_config)
