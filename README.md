@@ -35,6 +35,11 @@ IDs.
                 # Must run vep once with some vcf to index the fasta
                 perl variant_effect_predictor.pl --dir_cache /path/to/cache/ -i input.vcf \
                         --offline --hgvs --fasta Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+
+	6. Index the cache (tabix needed):
+		# Note: This takes time
+		perl ensembl-tools-release-84/scripts/variant_effect_predictor/convert_cache.pl \
+			--species homo_sapiens --version 84_GRCh38 -r
 ```
 
 ## Making VEP Custom Files
