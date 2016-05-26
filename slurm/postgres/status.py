@@ -178,6 +178,16 @@ def get_vep_inputs_from_status(engine, status_table):
 
     mapper(State, state)
 
+    #Load all completed state data and make a dictionary
+    completed = session.query(State).filter(State.status == 'COMPLETED').all()
+    c_lst     = []
+    for row in completed:
+        # Key is src vcf id
+        key = row.src_vcf_id
+        c_lst.append(key)
+    c_set = set(c_lst)
+
+    # Get input table
     data = Table('vep_input', meta,
                  Column("src_vcf_id", String, primary_key=True),
                  autoload=True)
@@ -189,18 +199,12 @@ def get_vep_inputs_from_status(engine, status_table):
     cases = session.query(Files).all()
 
     for row in cases:
-
-        completion = session.query(State).filter(State.src_vcf_id == row.src_vcf_id).all()
-
         rexecute = True
-
-        for comp_case in completion:
-            if not comp_case == None:
-                if comp_case.status == 'COMPLETED':
-                    rexecute = False
+        if row.src_vcf_id in c_set:
+            rexecute = False
 
         if rexecute:
-            s[count] = row 
+            s[count] = row
             count += 1
     
     return s
