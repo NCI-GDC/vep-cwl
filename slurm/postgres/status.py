@@ -15,9 +15,14 @@ class VEPStatus(StatusTypeMixin, postgres.utils.Base):
 
     __tablename__ = 'vep_cwl_status'
 
-def add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, output_location, datetime_now, md5, hostname):
+class VEPWgaStatus(StatusTypeMixin, postgres.utils.Base):
+
+    __tablename__ = 'vep_wga_cwl_status'
+
+def add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, 
+               output_location, datetime_now, md5, hostname, table=VEPStatus):
     """ add provided status metrics to database """
-    met = VEPStatus(case_id = case_id,
+    met = table(case_id = case_id,
               vcf_id        = vcf_id,
               src_vcf_id    = src_vcf_id,
               files         = file_ids,
@@ -31,16 +36,18 @@ def add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, output_loc
     postgres.utils.add_metrics(engine, met)
 
 def set_download_error(exit_code, case_id, vcf_id, src_vcf_id, file_ids, object_store, 
-                       datetime_now, threads, elapsed, engine, logger, hostname):
+                       datetime_now, threads, elapsed, engine, logger, hostname, 
+                       table=VEPStatus, timeTable=postgres.time.Time):
     ''' Sets the status for download errors '''
     loc    = 'UNKNOWN'
     md5    = 'UNKNOWN'
     if exit_code != 0:
         logger.info('Input file download error from {0}'.format(object_store))
         status = 'DOWNLOAD_FAILURE'
-        add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, loc, datetime_now, md5, hostname)
+        add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, loc, 
+                   datetime_now, md5, hostname, table=table)
         # Set metrics table
-        met = postgres.time.Time(case_id = case_id,
+        met = timeTable(case_id = case_id,
                    datetime_now = datetime_now,
                    vcf_id       = vcf_id,
                    src_vcf_id   = src_vcf_id, 
@@ -55,9 +62,10 @@ def set_download_error(exit_code, case_id, vcf_id, src_vcf_id, file_ids, object_
     else:
         logger.info('Input file size 0 from {0}'.format(object_store))
         status = 'INPUT_EMPTY'
-        add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, loc, datetime_now, md5, hostname)
+        add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, loc, 
+                   datetime_now, md5, hostname, table=table)
         # Set metrics table
-        met = postgres.time.Time(case_id = case_id,
+        met = timeTable(case_id = case_id,
                    datetime_now = datetime_now,
                    vcf_id       = vcf_id,
                    src_vcf_id   = src_vcf_id, 
@@ -71,16 +79,19 @@ def set_download_error(exit_code, case_id, vcf_id, src_vcf_id, file_ids, object_
         postgres.utils.add_metrics(engine, met)
 
 def set_no_input_variants_error(case_id, vcf_id, src_vcf_id, file_ids,
-                   object_store, datetime_now, threads, elapsed, engine, logger, hostname):
+                                object_store, datetime_now, threads, elapsed, 
+                                engine, logger, hostname, table=VEPStatus,
+                                timeTable=postgres.time.Time):
     ''' Sets the status for input VCF files with no variants '''
     loc    = 'UNKNOWN'
     md5    = 'UNKNOWN'
 
     logger.info('Error! Input VCF has no variants!')
     status = 'NO_INPUT_VARIANTS'
-    add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, loc, datetime_now, md5, hostname)
+    add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, loc, 
+               datetime_now, md5, hostname, table=table)
     # Set metrics table
-    met = postgres.time.Time(case_id = case_id,
+    met = timeTable(case_id = case_id,
                datetime_now = datetime_now,
                vcf_id       = vcf_id,
                src_vcf_id   = src_vcf_id,
@@ -163,7 +174,7 @@ def get_all_vep_inputs(engine, inputs_table='vep_input'):
 
     return s
 
-def get_vep_inputs_from_status(engine, status_table):
+def get_vep_inputs_from_status(engine, status_table, input_table='vep_input'):
     '''
     Gets the incompleted input files when the status table is present.
     '''
@@ -188,7 +199,7 @@ def get_vep_inputs_from_status(engine, status_table):
     c_set = set(c_lst)
 
     # Get input table
-    data = Table('vep_input', meta,
+    data = Table(input_table, meta,
                  Column("src_vcf_id", String, primary_key=True),
                  autoload=True)
 
