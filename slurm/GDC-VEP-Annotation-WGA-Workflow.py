@@ -219,7 +219,7 @@ def run_cwl(args):
         postgres.status.set_download_error(s3_exit_code, args.case_id, str(vcf_uuid), 
             args.src_vcf_id, [args.normal_bam_uuid, args.tumor_bam_uuid],
             args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, 
-            logger, hostname, table=postgres.utils.VEPWgaStatus, timeTable=TimeWga)
+            logger, hostname, table=postgres.status.VEPWgaStatus, timeTable=TimeWga)
 
         #remove work and input directories
         logger.info("Removing files")
@@ -236,7 +236,7 @@ def run_cwl(args):
         postgres.status.set_download_error(s3_exit_code, args.case_id, str(vcf_uuid), 
             args.src_vcf_id, [args.normal_bam_uuid, args.tumor_bam_uuid],
             args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine, 
-            logger, hostname, table=postgres.utils.VEPWgaStatus, timeTable=TimeWga)
+            logger, hostname, table=postgres.status.VEPWgaStatus, timeTable=TimeWga)
 
         #remove work and input directories
         logger.info("Removing files")
@@ -253,7 +253,7 @@ def run_cwl(args):
         postgres.status.set_no_input_variants_error(args.case_id, str(vcf_uuid), 
             args.src_vcf_id, [args.normal_bam_uuid, args.tumor_bam_uuid],
             args.object_store, datetime_now, str(args.fork), cwl_elapsed, engine,
-            logger, hostname, table=postgres.utils.VEPWgaStatus, timeTable=TimeWga)
+            logger, hostname, table=postgres.status.VEPWgaStatus, timeTable=TimeWga)
 
         #remove work and input directories
         logger.info("Removing files")
@@ -352,7 +352,7 @@ def run_cwl(args):
         logger.info("Updating status")
         postgres.status.add_status(engine, args.case_id, str(vcf_uuid), args.src_vcf_id,  
                                   [args.normal_bam_uuid, args.tumor_bam_uuid], status, 
-                                  loc, datetime_now, md5, hostname, table=postgres.utils.VEPWgaStatus)
+                                  loc, datetime_now, md5, hostname, table=postgres.status.VEPWgaStatus)
 
         #remove work and input directories
         logger.info("Removing files")
