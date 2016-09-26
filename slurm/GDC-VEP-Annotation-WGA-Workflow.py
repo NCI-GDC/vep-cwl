@@ -315,7 +315,7 @@ def run_cwl(args):
         vcf_file            = "%s.vep.reheader.vcf.gz" %(str(vcf_uuid))
         vcf_upload_location = os.path.join(vep_location, vcf_file)
         s3put_exit          = utils.s3.aws_s3_put(logger, vep_location, workdir, 
-                                                  "ceph", "http://gdc-cephb-objstore.osdc.io/")
+                                                  "cleversafe", "http://gdc-accessors.osdc.io/")
 
         full_vcf_file_path  = os.path.join(workdir, vcf_file)
         
