@@ -398,7 +398,7 @@ def get_args():
     p_run.add_argument('--refdir', required=True, help='Path to reference directory')
     p_run.add_argument('--basedir', default='/mnt/SCRATCH', help='Path to the base output file')
     p_run.add_argument('--object_store', required=True, choices=['ceph', 'cleversafe'], help='The s3 object store id')
-    p_run.add_argument('--host', default="10.64.0.97", help='postgres host name')
+    p_run.add_argument('--host', default="pgreadwrite.osdc.io", help='postgres host name')
     p_run.add_argument('--input_vcf', required=True, help='s3 url for input vcf file')
     p_run.add_argument('--src_vcf_id', required=True, help='Input VCF ID')
     p_run.add_argument('--case_id', required=True, help='case id')
