@@ -19,6 +19,10 @@ class VEPWgaStatus(StatusTypeMixin, postgres.utils.Base):
 
     __tablename__ = 'vep_wga_cwl_status'
 
+class VEPMutectDbsnpStatus(StatusTypeMixin, postgres.utils.Base):
+
+    __tablename__ = 'vep_mutect2_dbsnp_rerun_cwl_status'
+
 def add_status(engine, case_id, vcf_id, src_vcf_id, file_ids, status, 
                output_location, datetime_now, md5, hostname, table=VEPStatus):
     """ add provided status metrics to database """
