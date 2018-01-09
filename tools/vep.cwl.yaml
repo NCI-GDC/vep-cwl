@@ -1,599 +1,533 @@
 #!/usr/bin/env cwl-runner
 
-description: |
-    description: "Running Variant Effect Predictor v84"
-    Usage:  cwl-runner <this-file-path> options
+class: CommandLineTool
+
+cwlVersion: v1.0
+
+doc: "Runs Variant Effect Predictor v84"
 
 requirements:
-  - import: node-engine.cwl
-  - class: ShellCommandRequirement
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
     dockerPull: quay.io/ncigdc/vep-tool:0.2
 
-class: CommandLineTool
-
 inputs:
-  - id: "#input_file"
+  input_file:
     type: File
     label: "Input File"
-    description: "path to file you wish to annotate"
+    doc: "path to file you wish to annotate"
     inputBinding:
         prefix: --input_file
 
-  - id: "#fasta"
+  fasta:
     type: File
     label: "Reference fasta"
-    description: "path to reference file"
+    doc: "path to reference file"
     inputBinding:
         prefix: --fasta
-        secondaryFiles:
-            - ".fai"
-            - ".gzi"
+    secondaryFiles:
+        - ".fai"
+        - ".gzi"
 
-  - id: "#dir_cache"
-    type: File 
+  dir_cache:
+    type: Directory 
     label: "Cache directory" 
-    description: "specific directory for cache" 
+    doc: "specific directory for cache" 
     inputBinding:
         prefix: --dir_cache
 
-  - id: "#dir_plugins"
+  dir_plugins:
     type: string 
     default: "/home/ubuntu/tools/vep-plugins" 
     label: "specific directory for plugins" 
-    description: "path to reference file"
+    doc: "path to reference file"
     inputBinding:
         prefix: --dir_plugins
 
-  - id: "#output_file"
+  output_file:
     type: string 
     label: "Output file" 
-    description: "output file name" 
+    doc: "output file name" 
     inputBinding:
         prefix: --output_file
 
-  - id: "#stats_file"
-    type: string 
+  stats_file:
+    type: string?
     label: "Statistics file" 
-    description: "the path to the output stats file (HTML is default type)" 
-    default: null
+    doc: "the path to the output stats file (HTML is default type)" 
     inputBinding:
         prefix: --stats_file
 
-  - id: "#no_stats"
-    type: ["null", boolean]
+  no_stats:
+    type: boolean?
     label: "No Stats" 
-    description: "if you don't want stats to be output" 
+    doc: "if you don't want stats to be output" 
     inputBinding:
         prefix: --no_stats
 
-  - id: "#warning_file"
-    type: string 
+  warning_file:
+    type: string?
     label: "Plugin directory" 
-    description: "file to write warnings to" 
-    default: null
+    doc: "file to write warnings to" 
     inputBinding:
         prefix: --warning_file
 
-  - id: "#stats_text"
-    type: boolean
-    default: null
+  stats_text:
+    type: boolean?
     label: "Stats text" 
-    description: "output stats file as text instead of HTML" 
+    doc: "output stats file as text instead of HTML" 
     inputBinding:
         prefix: --stats_text
 
-  - id: "#format"
+  format:
     type: string
     default: "vcf"
     label: "Input file format" 
-    description: "input file format" 
+    doc: "input file format" 
     inputBinding:
         prefix: --format
         
-  - id: "#individual"
-    type: string
-    default: null
+  individual:
+    type: string?
     label: "Individual" 
-    description: "only output variants from this individual in the vcf file" 
+    doc: "only output variants from this individual in the vcf file" 
     inputBinding:
         prefix: --individual
 
-  - id: "#tabix"
-    type: boolean
-    default: null
+  tabix:
+    type: boolean?
     label: "Tabix flag" 
-    description: "bgzip and tabix-index output" 
+    doc: "bgzip and tabix-index output" 
     inputBinding:
         prefix: --tabix
 
-  - id: "#gvf"
-    type: boolean
-    default: null
+  gvf:
+    type: boolean?
     label: "Output gvf" 
-    description: "produce gvf output" 
+    doc: "produce gvf output" 
     inputBinding:
         prefix: --gvf
 
-  - id: "#vcf"
-    type: boolean
-    default: null
+  vcf:
+    type: boolean?
     label: "Output vcf" 
-    description: "produce VCF output" 
+    doc: "produce VCF output" 
     inputBinding:
         prefix: --vcf
 
-  - id: "#solr"
-    type: boolean
-    default: null
+  solr:
+    type: boolean?
     label: "Output solr" 
-    description: "produce XML output for Solr" 
+    doc: "produce XML output for Solr" 
     inputBinding:
         prefix: --solr
 
-  - id: "#json"
-    type: boolean
-    default: null
+  json:
+    type: boolean?
     label: "Output JSON" 
-    description: "produce JSON document output" 
+    doc: "produce JSON document output" 
     inputBinding:
         prefix: --json
 
-  - id: "#tab"
-    type: boolean
-    default: null
+  tab:
+    type: boolean?
     label: "Output tab-delimited" 
-    description: "produce tabulated output" 
+    doc: "produce tabulated output" 
     inputBinding:
         prefix: --tab
 
-  - id: "#vcf_info_field"
-    type: string
-    default: null 
+  vcf_info_field:
+    type: string?
     label: "VCF info field" 
-    description: "allow user to change VCF info field name" 
+    doc: "allow user to change VCF info field name" 
     inputBinding:
         prefix: --vcf_info_field
 
-  - id: "#keep_csq"
-    type: boolean
-    default: null
+  keep_csq:
+    type: boolean?
     label: "Keep CSQ" 
-    description: "don't nuke existing CSQ fields in VCF" 
+    doc: "don't nuke existing CSQ fields in VCF" 
     inputBinding:
         prefix: --keep_csq
 
-  - id: "#keep_ann"
-    type: boolean
-    default: null
+  keep_ann:
+    type: boolean?
     label: "Keep ann" 
-    description: "synonym for keep_seq" 
+    doc: "synonym for keep_seq" 
     inputBinding:
         prefix: --keep_ann
 
-  - id: "#assembly"
+  assembly:
     type: string
     default: "GRCh38"
     label: "Assembly" 
-    description: "assembly version to use" 
+    doc: "assembly version to use" 
     inputBinding:
         prefix: --assembly
 
-  - id: "#chr"
-    type: string
-    default: null 
+  chr:
+    type: string?
     label: "Chromosomes" 
-    description: "analyze only these chromosomes, e.g., 1-5,10,MT" 
+    doc: "analyze only these chromosomes, e.g., 1-5,10,MT" 
     inputBinding:
         prefix: --chr
 
-  - id: "#check_ref"
-    type: boolean
-    default: null
+  check_ref:
+    type: boolean?
     label: "Check reference" 
-    description: "check supplied reference allele against DB" 
+    doc: "check supplied reference allele against DB" 
     inputBinding:
         prefix: --check_ref
 
-  - id: "#check_existing"
-    type: boolean
-    default: null
+  check_existing:
+    type: boolean?
     label: "Check exisiting" 
-    description: "find existing co-located variations" 
+    doc: "find existing co-located variations" 
     inputBinding:
         prefix: --check_existing
 
-  - id: "#check_svs"
-    type: boolean
-    default: null
+  check_svs:
+    type: boolean?
     label: "Check SVS" 
-    description: "find overlapping structural variations" 
+    doc: "find overlapping structural variations" 
     inputBinding:
         prefix: --check_svs
 
-  - id: "#check_alleles"
-    type: boolean
-    default: null
+  check_alleles:
+    type: boolean?
     label: "Check alleles" 
-    description: "only attribute co-located if alleles are the same" 
+    doc: "only attribute co-located if alleles are the same" 
     inputBinding:
         prefix: --check_alleles
 
-  - id: "#check_frequency"
-    type: boolean
-    default: null
+  check_frequency:
+    type: boolean?
     label: "Check frequency" 
-    description: "enable frequency checking" 
+    doc: "enable frequency checking" 
     inputBinding:
         prefix: --check_frequency
 
-  - id: "#gmaf"
-    type: boolean
-    default: null
+  gmaf:
+    type: boolean?
     label: "Global MAF" 
-    description: "add global MAF of existing var" 
+    doc: "add global MAF of existing var" 
     inputBinding:
         prefix: --gmaf
 
-  - id: "#maf_1kg"
-    type: boolean
-    default: null
+  maf_1kg:
+    type: boolean?
     label: "MAF 1000 Genomes" 
-    description: "add 1KG MAFs of existing vars" 
+    doc: "add 1KG MAFs of existing vars" 
     inputBinding:
         prefix: --maf_1kg
 
-  - id: "#maf_esp"
-    type: boolean
-    default: null
+  maf_esp:
+    type: boolean?
     label: "MAF ESP" 
-    description: "add ESP MAFs of existing vars" 
+    doc: "add ESP MAFs of existing vars" 
     inputBinding:
         prefix: --maf_esp
 
-  - id: "#maf_exac"
-    type: boolean
-    default: null
+  maf_exac:
+    type: boolean?
     label: "MAF ExAC" 
-    description: "add ExAC MAFs of existing vars" 
+    doc: "add ExAC MAFs of existing vars" 
     inputBinding:
         prefix: --maf_exac
 
-  - id: "#phased"
-    type: boolean
-    default: null
+  phased:
+    type: boolean?
     label: "Phased" 
-    description: "force VCF genotypes to be interpreted as phased" 
+    doc: "force VCF genotypes to be interpreted as phased" 
     inputBinding:
         prefix: --phased
 
-  - id: "#fork"
-    type: int 
+  fork:
+    type: int
     default: 1 
     label: "Fork" 
-    description: "fork into N processes" 
+    doc: "fork into N processes" 
     inputBinding:
         prefix: --fork
 
-  - id: "#dont_skip"
-    type: boolean
-    default: null
+  dont_skip:
+    type: boolean?
     label: "Don't skip" 
-    description: "don't skip vars that fail validation" 
+    doc: "don't skip vars that fail validation" 
     inputBinding:
         prefix: --dont_skip
 
-  - id: "#verbose"
-    type: boolean
-    default: null
+  verbose:
+    type: boolean?
     label: "Verbose" 
-    description: "print out a bit more info while running" 
+    doc: "print out a bit more info while running" 
     inputBinding:
         prefix: --verbose
 
-  - id: "#quiet"
-    type: boolean
-    default: null
+  quiet:
+    type: boolean?
     label: "Quiet" 
-    description: "print nothign to STDOUT (unless using -o stdout)" 
+    doc: "print nothign to STDOUT (unless using -o stdout)" 
     inputBinding:
         prefix: --quiet
 
-  - id: "#no_progress"
-    type: boolean
-    default: null
+  no_progress:
+    type: boolean?
     label: "No progress bar" 
-    description: "don't display progress bars" 
+    doc: "don't display progress bars" 
     inputBinding:
         prefix: --no_progress
 
-  - id: "#everything"
-    type: boolean
-    default: null
+  everything:
+    type: boolean?
     label: "Everything" 
-    description: "switch on EVERYTHING" 
+    doc: "switch on EVERYTHING" 
     inputBinding:
         prefix: --everything
 
-  - id: "#canonical"
-    type: boolean
-    default: null
+  canonical:
+    type: boolean?
     label: "Canonical" 
-    description: "indicates if transcript is canonical" 
+    doc: "indicates if transcript is canonical" 
     inputBinding:
         prefix: --canonical
 
-  - id: "#tsl"
-    type: boolean
-    default: null
+  tsl:
+    type: boolean?
     label: "TSL" 
-    description: "output transcript support level" 
+    doc: "output transcript support level" 
     inputBinding:
         prefix: --tsl
 
-  - id: "#appris"
-    type: boolean
-    default: null
+  appris:
+    type: boolean?
     label: "APPRIS" 
-    description: "output APPRIS transcript annotation" 
+    doc: "output APPRIS transcript annotation" 
     inputBinding:
         prefix: --appris
 
-  - id: "#ccds"
-    type: boolean
-    default: null
+  ccds:
+    type: boolean?
     label: "CCDS" 
-    description: "output CCDS identifier" 
+    doc: "output CCDS identifier" 
     inputBinding:
         prefix: --ccds
 
-  - id: "#xref_refseq"
-    type: boolean
-    default: null
+  xref_refseq:
+    type: boolean?
     label: "XREF RefSeq" 
-    description: "output refseq mrna xref" 
+    doc: "output refseq mrna xref" 
     inputBinding:
         prefix: --xref_refseq
 
-  - id: "#uniprot"
-    type: boolean
-    default: null
+  uniprot:
+    type: boolean?
     label: "UniProt" 
-    description: "output Uniprot identifiers (includes UniParc)" 
+    doc: "output Uniprot identifiers (includes UniParc)" 
     inputBinding:
         prefix: --uniprot
 
-  - id: "#protein"
-    type: boolean
-    default: null
+  protein:
+    type: boolean?
     label: "Protein" 
-    description: "add e! protein ID to extra column" 
+    doc: "add e! protein ID to extra column" 
     inputBinding:
         prefix: --protein
 
-  - id: "#biotype"
-    type: boolean
-    default: null
+  biotype:
+    type: boolean?
     label: "Biotype" 
-    description: "add biotype of transcript to output" 
+    doc: "add biotype of transcript to output" 
     inputBinding:
         prefix: --biotype
 
-  - id: "#hgnc"
-    type: boolean
-    default: null
+  hgnc:
+    type: boolean?
     label: "HGNC ID" 
-    description: "add HGNC gene ID to extra column" 
+    doc: "add HGNC gene ID to extra column" 
     inputBinding:
         prefix: --hgnc
 
-  - id: "#symbol"
-    type: boolean
-    default: null
+  symbol:
+    type: boolean?
     label: "Gene Symbol" 
-    description: "add gene symbol (e.g., HGNC)" 
+    doc: "add gene symbol (e.g., HGNC)" 
     inputBinding:
         prefix: --symbol
 
-  - id: "#gene_phenotype"
-    type: boolean
-    default: null
+  gene_phenotype:
+    type: boolean?
     label: "Gene phenotype" 
-    description: "indicates if genes are phenotype-associated" 
+    doc: "indicates if genes are phenotype-associated" 
     inputBinding:
         prefix: --gene_phenotype
 
-  - id: "#hgvs"
-    type: boolean
-    default: null
+  hgvs:
+    type: boolean?
     label: "HGVS" 
-    description: "add HGVS names to extra column" 
+    doc: "add HGVS names to extra column" 
     inputBinding:
         prefix: --hgvs
 
-  - id: "#shift_hgvs"
-    type: int 
-    default: null
+  shift_hgvs:
+    type: int? 
     label: "Shift HGVS" 
-    description: "disable/enable 3-prime shifting of HGVS indels to comply with standard" 
+    doc: "disable/enable 3-prime shifting of HGVS indels to comply with standard" 
     inputBinding:
         prefix: --shift_hgvs
 
-  - id: "#sift"
-    type: string
-    default: null 
+  sift:
+    type: string?
     label: "SIFT" 
-    description: "SIFT predictions" 
+    doc: "SIFT predictions" 
     inputBinding:
         prefix: --sift
 
-  - id: "#polyphen"
-    type: string
-    default: null 
+  polyphen:
+    type: string?
     label: "PolyPhen" 
-    description: "PolyPhen predictions" 
+    doc: "PolyPhen predictions" 
     inputBinding:
         prefix: --polyphen
 
-  - id: "#humdiv"
-    type: boolean
-    default: null
+  humdiv:
+    type: boolean?
     label: "humdiv" 
-    description: "use humDiv instead of humVar for PolyPhen" 
+    doc: "use humDiv instead of humVar for PolyPhen" 
     inputBinding:
         prefix: --humdiv
 
-  - id: "#condel"
-    type: boolean
-    default: null
+  condel:
+    type: boolean?
     label: "Condel" 
-    description: "Condel predictions" 
+    doc: "Condel predictions" 
     inputBinding:
         prefix: --condel
 
-  - id: "#variant_class"
-    type: boolean
-    default: null
+  variant_class:
+    type: boolean?
     label: "Variant class" 
-    description: "get SO variant type" 
+    doc: "get SO variant type" 
     inputBinding:
         prefix: --variant_class
 
-  - id: "#regulatory"
-    type: boolean
-    default: null
+  regulatory:
+    type: boolean?
     label: "Regulatory" 
-    description: "enable regulatory stuff" 
+    doc: "enable regulatory stuff" 
     inputBinding:
         prefix: --regulatory
 
-  - id: "#no_intergenic"
-    type: boolean
-    default: null
+  no_intergenic:
+    type: boolean?
     label: "No intergenic" 
-    description: "don't print out INTEGENIC consequences" 
+    doc: "don't print out INTEGENIC consequences" 
     inputBinding:
         prefix: --no_intergenic
 
-  - id: "#domains"
-    type: boolean
-    default: null
+  domains:
+    type: boolean?
     label: "Domains" 
-    description: "output overlapping protein features" 
+    doc: "output overlapping protein features" 
     inputBinding:
         prefix: --domains
 
-  - id: "#numbers"
-    type: boolean
-    default: null
+  numbers:
+    type: boolean?
     label: "Numbers" 
-    description: "include exon and intron numbers" 
+    doc: "include exon and intron numbers" 
     inputBinding:
         prefix: --numbers
 
-  - id: "#total_length"
-    type: boolean
-    default: null
+  total_length:
+    type: boolean?
     label: "Total length" 
-    description: "give total length alongside positions e.g., 14/203" 
+    doc: "give total length alongside positions e.g., 14/203" 
     inputBinding:
         prefix: --total_length
 
-  - id: "#allele_number"
-    type: boolean
-    default: null
+  allele_number:
+    type: boolean?
     label: "Allele number" 
-    description: "indicate allele by number to avoid confusion with VCF conversions" 
+    doc: "indicate allele by number to avoid confusion with VCF conversions" 
     inputBinding:
         prefix: --allele_number
 
-  - id: "#no_escape"
-    type: boolean
-    default: null
+  no_escape:
+    type: boolean?
     label: "No escape" 
-    description: "don't percent-escape HGVS strings" 
+    doc: "don't percent-escape HGVS strings" 
     inputBinding:
         prefix: --no_escape
 
-  - id: "#cache_version"
+  cache_version:
     type: string
     default: "84"
     label: "Cache version" 
-    description: "specify a different cache version" 
+    doc: "specify a different cache version" 
     inputBinding:
         prefix: --cache_version
 
-  - id: "#plugin"
+  plugin:
     type: 
-      - "null"
       - type: array
         items: string
         inputBinding: { prefix: "--plugin" }
     label: "Plugin options" 
-    description: "specify a method in a module in the plugins directory. use multiple times if needed" 
+    doc: "specify a method in a module in the plugins directory. use multiple times if needed" 
 
-  - id: "#gdc_entrez"
-    type: File
-    default: null
-    description: "if you want to use the GDC_entrez plugin, the path to the json file"
+  gdc_entrez:
+    type: File?
+    doc: "if you want to use the GDC_entrez plugin, the path to the json file"
     inputBinding:
         prefix: "--plugin"
         valueFrom: "$(self ? 'GDC_entrez,' + self.path : null)"
 
-  - id: "#gdc_evidence"
-    type: File
-    default: null
-    description: "if you want to use the GDC_evidence plugin, the path to the tabix-indexed variation vcf"
+  gdc_evidence:
+    type: File?
+    doc: "if you want to use the GDC_evidence plugin, the path to the tabix-indexed variation vcf"
     inputBinding:
         prefix: "--plugin"
         valueFrom: "$(self ? 'GDC_evidence,' + self.path : null)"
-        secondaryFiles:
-            - ".tbi"
+    secondaryFiles:
+        - ".tbi"
 
-  - id: "#fields"
-    type: string
-    default: null
+  fields:
+    type: string?
     label: "Fields" 
-    description: "Configure the output format using a comma separated list of fields. Fields may be those present in the default output columns, or any of those that appear in the Extra column (including those added by plugins or custom annotations)."
+    doc: "Configure the output format using a comma separated list of fields. Fields may be those present in the default output columns, or any of those that appear in the Extra column (including those added by plugins or custom annotations)."
     inputBinding:
         prefix: --fields
 
 outputs:
-  - id: "#vep_out"
+  vep_out:
     type: File
-    description: "annotated output file"
+    doc: "annotated output file"
     outputBinding:
-        glob: $(inputs['output_file'])
+        glob: $(inputs.output_file)
 
-  - id: "#stats_file"
-    type: [File, "null"]
-    description: "statistics file"
+  stats_out_file:
+    type: File? 
+    doc: "statistics file"
     outputBinding:
-        glob: $(inputs['stats_file'])
+        glob: $(inputs.stats_file)
 
-  - id: "#warning_file"
-    type: ["null", File]
-    description: "warnings file"
+  warning_out_file:
+    type: File? 
+    doc: "warnings file"
     outputBinding:
-        glob: $(inputs['warning_file'])
+        glob: $(inputs.warning_file)
 
-  - id: "#log_file"
+  time_file:
     type: File
-    description: "stdout file"
+    doc: "time file"
     outputBinding:
-        glob: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.logs')
-
-  - id: "#time_file"
-    type: File
-    description: "time file"
-    outputBinding:
-        glob: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.time')
+        glob: $(inputs.output_file.substr(0, inputs.output_file.lastIndexOf('.')) + '.time')
 
 baseCommand: ["/usr/bin/time", "-v"]
 
 arguments:
-  - valueFrom: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.time')
+  - valueFrom: $(inputs.output_file.substr(0, inputs.output_file.lastIndexOf('.')) + '.time')
     position: -99
     prefix: "-o"
 
@@ -608,11 +542,3 @@ arguments:
 
   - valueFrom: "--force_overwrite"
     position: -95
-
-  - valueFrom: $(inputs['output_file'].substr(0, inputs['output_file'].lastIndexOf('.')) + '.logs')
-    position: 99 
-    prefix: ">"
-
-  - valueFrom: '2>&1'
-    position: 100 
-    shellQuote: false 
