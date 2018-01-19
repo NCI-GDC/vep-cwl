@@ -34,18 +34,6 @@ inputs:
     default: 4
 
 outputs:
-  annotated_vcf:
-    type: File
-    outputSource: run_vep/vep_out
-  annotated_vcf_index:
-    type: File
-    outputSource: run_vep/vep_index_out
-  vep_stats:
-    type: File
-    outputSource: run_vep/stats_out_file
-  vep_time:
-    type: File
-    outputSource: run_vep/time_file
   indexd_vcf_uuid:
     type: string
     outputSource: upload_vep_vcf/indexd_uuid 
