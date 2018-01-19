@@ -31,7 +31,7 @@ inputs:
     doc: optional s3 key prefix
   threads:
     type: int
-    default: 4
+    default: 1
 
 outputs:
   indexd_vcf_uuid:
