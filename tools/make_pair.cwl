@@ -5,12 +5,17 @@ cwlVersion: v1.0
 requirements:
   - class: DockerRequirement
     dockerPull: alpine
+  - class: InlineJavascriptRequirement
   - class: InitialWorkDirRequirement
-    listing:
-      - entryname: $(inputs.parent_file.basename)
-        entry: $(input.parent_file)
-      - entryname: $(inputs.child_file.basename)
-        entry: $(input.child_file)
+    listing: |
+      ${
+           var i
+           var ret = [{"entryname": inputs.parent_file.basename, "entry": inputs.parent_file}];
+           for( i of inputs.children ) {
+               ret.push({"entryname": i.basename, "entry": i})
+           }
+           return ret
+       }
 
 class: CommandLineTool
 
@@ -18,17 +23,23 @@ inputs:
   parent_file:
     type: File
 
-  child_file:
-    type: file
+  children:
+    type: File[]
 
 outputs:
   output:
     type: File
     outputBinding:
-      glob: |
-        ${
-           return {"class": "File", "path": inputs.parent_file.basename, 
-                   "secondaryFiles": [{"class": "File", "path": inputs.child_file.basename}]} 
+      glob: $(inputs.parent_file.basename)
+    secondaryFiles: |
+      ${
+         var ret = [];
+         var locbase = self.location.substr(0, self.location.lastIndexOf('/'))
+         var i
+         for( i of inputs.children ) {
+           ret.push({"class": "File", "location": locbase + '/' + i.basename})
          }
+         return ret
+       }
 
 baseCommand: "true"
