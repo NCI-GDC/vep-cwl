@@ -33,7 +33,7 @@ outputs:
 
 steps:
   upload_file:
-    run: ../tools/bio_client_upload_pull_uuid.cwl
+    run: ../../tools/bio_client_upload_pull_uuid.cwl
     in:
       config-file: bioclient_config
       input: input_file 
@@ -48,7 +48,7 @@ steps:
     out: [ output ]
  
   extract_indexd_info:
-    run: ../tools/emit_json_value.cwl
+    run: ../../tools/emit_json_value.cwl
     in:
       input: upload_file/output
       key:

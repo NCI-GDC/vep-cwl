@@ -34,21 +34,18 @@ inputs:
     default: 4
 
 outputs:
-  #annotated_vcf:
-  #  type: File
-  #  outputSource: run_vep/vep_out
-  #annotated_vcf_index:
-  #  type: File
-  #  outputSource: run_vep/vep_index_out
-  #vep_stats:
-  #  type: File
-  #  outputSource: run_vep/stats_out_file
-  #vep_warnings:
-  #  type: File
-  #  outputSource: run_vep/warning_out_file
-  #vep_time:
-  #  type: File
-  #  outputSource: run_vep/time_file
+  annotated_vcf:
+    type: File
+    outputSource: run_vep/vep_out
+  annotated_vcf_index:
+    type: File
+    outputSource: run_vep/vep_index_out
+  vep_stats:
+    type: File
+    outputSource: run_vep/stats_out_file
+  vep_time:
+    type: File
+    outputSource: run_vep/time_file
   indexd_vcf_uuid:
     type: string
     outputSource: upload_vep_vcf/indexd_uuid 
@@ -58,9 +55,6 @@ outputs:
   indexd_vep_stats_uuid:
     type: string
     outputSource: upload_vep_stats/indexd_uuid 
-  indexd_vep_warning_uuid:
-    type: string
-    outputSource: upload_vep_warnings/indexd_uuid 
   indexd_vep_time_uuid:
     type: string
     outputSource: upload_vep_time/indexd_uuid 
@@ -145,16 +139,6 @@ steps:
       upload_prefix: upload_prefix
       job_uuid: job_uuid
       input_file: run_vep/stats_out_file
-    out: [ indexd_uuid ]
-
-  upload_vep_warnings:
-    run: ./subworkflows/upload_and_emit.cwl
-    in:
-      bioclient_config: bioclient_config
-      bioclient_load_bucket: bioclient_load_bucket
-      upload_prefix: upload_prefix
-      job_uuid: job_uuid
-      input_file: run_vep/warning_out_file
     out: [ indexd_uuid ]
 
   upload_vep_time:
