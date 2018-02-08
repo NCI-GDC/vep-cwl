@@ -12,7 +12,7 @@ requirements:
   - class: DockerRequirement
     dockerPull: quay.io/ncigdc/vep-tool:0.2
   - class: ResourceRequirement
-    coresMin: $(inputs.fork) 
+    coresMin: "$(inputs.fork ? inputs.fork : 1)" 
     ramMin: 4096 
 
 inputs:
@@ -253,6 +253,7 @@ inputs:
     doc: "fork into N processes" 
     inputBinding:
         prefix: --fork
+        valueFrom: "$(self > 1 ? self.toString() : null)"
 
   dont_skip:
     type: boolean?
