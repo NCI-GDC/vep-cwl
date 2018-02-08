@@ -3,10 +3,9 @@ GDC VEP Annotation Workflow
 
 ## Overview
 
-Filter scaffolds that aren't the main assembly, annotate variants using the 
+Annotate variants using the 
 [Variant Effect Predictor](http://useast.ensembl.org/info/docs/tools/vep/index.html)
-v84 with our customized cache file, and reheader the VCF file with the GDC
-IDs.
+v84 with our customized cache file.
 
 ## Making VEP Custom Cache
 
@@ -65,15 +64,3 @@ IDs.
                 # Git repo: https://github.com/mskcc/vcf2maf.git
                 # File is located in vcf2maf/data/isoform_overrides_uniprot
 ```
-
-## Running Workflow
-
-The simplest way to run the workflow is to use the scripts and documentation available in the
-slurm directory and pulling from the `feat/slurm` branch.
-
-### Steps
-
-1. Stage nodes if not done
-2. Pull down input VCF file
-3. Run workflow (`contig filter -> annotate -> reheader`)
-4. Upload to `s3://ceph_vep` 
