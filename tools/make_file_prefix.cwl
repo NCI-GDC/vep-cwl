@@ -11,7 +11,10 @@ inputs:
   project_id:
     type: string?
 
-  aliquot_id:
+  caller_id:
+    type: string?
+
+  job_id:
     type: string
 
   experimental_strategy:
@@ -19,15 +22,15 @@ inputs:
 
 outputs:
   output:
-    type: string 
+    type: string
 
 expression: |
   ${
      var exp = inputs.experimental_strategy.toLowerCase().replace(/[-\s]/g, "_");
 
-     var pfx = inputs.project_id 
-       ? inputs.project_id + '.' + inputs.aliquot_id + '.' + exp
-       : inputs.aliquot_id + '.' + exp;
+     var pid = inputs.project_id ? inputs.project_id + '.': '';
+     var cid = inputs.caller_id ? '.' + inputs.caller_id : '';
+     var pfx = pid + inputs.job_id + '.' + exp + cid;
 
      return {'output': pfx};
    }

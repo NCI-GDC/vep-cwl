@@ -11,9 +11,6 @@ requirements:
   - class: SubworkflowFeatureRequirement
 
 inputs:
-  aliquot_uuid:
-    type: string
-    doc: GDC aliquot node id, used for output filenames
   project_id:
     type: string?
     doc: GDC project id used for output filenames
@@ -96,8 +93,9 @@ steps:
     run: ../tools/make_file_prefix.cwl
     in:
       project_id: project_id
-      aliquot_id: aliquot_uuid
+      job_id: job_uuid
       experimental_strategy: experimental_strategy
+      caller_id: caller_id
     out: [ output ]
 
   run_vep:
@@ -109,13 +107,13 @@ steps:
       tabix:
         default: true
       output_file:
-        source: [get_filename_prefix/output, caller_id]
-        valueFrom: $(self[0] + '.' + self[1] + '.somatic_annotation.vcf.gz')
+        source: get_filename_prefix/output
+        valueFrom: $(self + '.somatic_annotation.vcf.gz')
       vcf:
         default: true 
       stats_file:
-        source: [get_filename_prefix/output, caller_id]
-        valueFrom: $(self[0] + '.' + self[1] + '.somatic_annotation.stats.txt')
+        source: get_filename_prefix/output
+        valueFrom: $(self + '.somatic_annotation.stats.txt')
       stats_text:
         default: true
       fork: threads 
