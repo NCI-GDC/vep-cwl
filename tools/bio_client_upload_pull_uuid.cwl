@@ -5,13 +5,10 @@ cwlVersion: v1.0
 class: CommandLineTool
 requirements:
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/bio-client:ecfb12c2f41276f29862c1603f806b5478f9845405c5e2af5c7c0538f93425d9
-  - class: ResourceRequirement
-    coresMin: 1
-    ramMin: 1024
+    dockerPull: quay.io/ncigdc/bio-client:c5581c5429a9920db12a94381d8c22a7f1436dc1b0e2ec3d56317642250038ac
 
 inputs:
-  config-file:
+  config_file:
     type: File
     inputBinding:
       prefix: --config-file
@@ -23,19 +20,19 @@ inputs:
     inputBinding:
       position: 1
 
-  upload-bucket:
+  upload_bucket:
     type: string
     inputBinding:
       prefix: --upload-bucket
       position: 2
 
-  upload-key:
+  upload_key:
     type: string
     inputBinding:
       prefix: --upload_key
       position: 3
 
-  input:
+  local_file:
     type: File
     inputBinding:
       position: 99

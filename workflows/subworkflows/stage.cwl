@@ -47,7 +47,7 @@ steps:
   extract_cache:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_cache_gdc_id
     out: [ output ]
 
@@ -60,49 +60,49 @@ steps:
   extract_vcf:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vcf_gdc_id
     out: [ output ]
 
   extract_fasta:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_fasta_gdc_id
     out: [ output ]
 
   extract_fai:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_fasta_fai_gdc_id
     out: [ output ]
 
   extract_gzi:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_fasta_gzi_gdc_id
     out: [ output ]
 
   extract_entrez:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_entrez_json_gdc_id
     out: [ output ]
 
   extract_evidence_vcf:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_evidence_vcf_gdc_id
     out: [ output ]
 
   extract_evidence_vcf_index:
     run: ../../tools/bio_client_download.cwl
     in:
-      config-file: bioclient_config
+      config_file: bioclient_config
       download_handle: input_vep_evidence_index_gdc_id
     out: [ output ]
 

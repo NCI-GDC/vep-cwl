@@ -35,10 +35,10 @@ steps:
   upload_file:
     run: ../../tools/bio_client_upload_pull_uuid.cwl
     in:
-      config-file: bioclient_config
-      input: input_file 
-      upload-bucket: bioclient_load_bucket
-      upload-key:
+      config_file: bioclient_config
+      local_file: input_file 
+      upload_bucket: bioclient_load_bucket
+      upload_key:
         source: [upload_prefix, job_uuid, input_file]
         valueFrom: |
           ${
