@@ -486,15 +486,17 @@ inputs:
     type: File?
     doc: "if you want to use the GDC_entrez plugin, the path to the json file"
     inputBinding:
-        prefix: "--plugin"
-        valueFrom: "$(self ? 'GDC_entrez,' + self.path : null)"
+        prefix: "--plugin GDC_entrez,"
+        separate: false
+        shellQuote: false 
 
   gdc_evidence:
     type: File?
     doc: "if you want to use the GDC_evidence plugin, the path to the tabix-indexed variation vcf"
     inputBinding:
-        prefix: "--plugin"
-        valueFrom: "$(self ? 'GDC_evidence,' + self.path : null)"
+        prefix: "--plugin GDC_evidence,"
+        separate: false
+        shellQuote: false 
     secondaryFiles:
         - ".tbi"
 
