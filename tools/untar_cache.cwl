@@ -9,12 +9,10 @@ requirements:
     dockerPull: alpine
   - class: InlineJavascriptRequirement
   - class: InitialWorkDirRequirement
-    listing:
-      - entry: |
-          ${
-             return {"class": "Directory", "basename": inputs.cache_dir, "listing": []}
-           }
-        writable: true
+    listing: |
+      ${
+           return [{"entry": {"class": "Directory", "basename": inputs.cache_dir, "listing": []}, "writable": true}]
+       }
   - class: ResourceRequirement
     coresMin: 1
     ramMin: 1024
