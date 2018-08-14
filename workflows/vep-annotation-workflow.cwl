@@ -104,6 +104,22 @@ steps:
       input_file: stage_workflow/input_vcf
       fasta: stage_workflow/vep_reference
       dir_cache: stage_workflow/vep_cache
+      shift_hgvs:
+        default: 1
+      failed:
+        default: 1
+      flag_pick_allele:
+        default: true
+      pick_order:
+        default:
+          - canonical
+          - tsl
+          - biotype
+          - rank
+          - ccds
+          - length
+      minimal:
+        default: true
       tabix:
         default: true
       output_file:
@@ -129,11 +145,13 @@ steps:
         default: true
       check_alleles:
         default: true
+      check_existing:
+        default: true
       assembly:
         default: "GRCh38" 
       gdc_entrez: stage_workflow/vep_entrez_json 
       gdc_evidence: stage_workflow/vep_evidence_vcf 
-    out: [ vep_out, vep_index_out, stats_out_file, warning_out_file, time_file ]
+    out: [ vep_out, vep_index_out, stats_out_file, warning_out_file ]
 
   upload_vep_vcf:
     run: ./subworkflows/upload_and_emit.cwl

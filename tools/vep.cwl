@@ -55,12 +55,35 @@ inputs:
     inputBinding:
         prefix: --output_file
 
+  flag_pick_allele:
+    type: boolean?
+    label: "flag pick allele"
+    inputBinding:
+        prefix: --flag_pick_allele
+
+  pick_order:
+    type: string[]
+    default: null
+    inputBinding:
+        prefix: --pick_order
+        itemSeparator: ","
+
   stats_file:
     type: string?
     label: "Statistics file" 
     doc: "the path to the output stats file (HTML is default type)" 
     inputBinding:
         prefix: --stats_file
+
+  minimal:
+    type: boolean?
+    inputBinding:
+        prefix: --minimal
+
+  failed:
+    type: int?
+    inputBinding:
+        prefix: --failed
 
   no_stats:
     type: boolean?
@@ -539,27 +562,4 @@ outputs:
     outputBinding:
         glob: $(inputs.warning_file)
 
-  time_file:
-    type: File
-    doc: "time file"
-    outputBinding:
-        glob: $(inputs.output_file.substr(0, inputs.output_file.lastIndexOf('.')) + '.time')
-
-baseCommand: ["/usr/bin/time", "-v"]
-
-arguments:
-  - valueFrom: $(inputs.output_file.substr(0, inputs.output_file.lastIndexOf('.')) + '.time')
-    position: -99
-    prefix: "-o"
-
-  - valueFrom: "variant_effect_predictor.pl"
-    position: -98
-
-  - valueFrom: "--offline"
-    position: -97
-
-  - valueFrom: "--cache"
-    position: -96
-
-  - valueFrom: "--force_overwrite"
-    position: -95
+baseCommand: ["variant_effect_predictor.pl", "--offline", "--cache", "--force_overwrite"]
