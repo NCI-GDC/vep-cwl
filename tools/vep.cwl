@@ -10,7 +10,7 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ShellCommandRequirement
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/vep-tool:0.2
+    dockerPull: quay.io/ncigdc/vep-tool:b774e6fcc0f046d9155907ccc242e6e3c2449c6a
   - class: ResourceRequirement
     coresMin: "$(inputs.fork ? inputs.fork : 1)" 
     ramMin: 4096 
@@ -42,9 +42,9 @@ inputs:
 
   dir_plugins:
     type: string 
-    default: "/home/ubuntu/tools/vep-plugins" 
+    default: "/opt/vep-plugins"
     label: "specific directory for plugins" 
-    doc: "path to reference file"
+    doc: "path to plugin directory"
     inputBinding:
         prefix: --dir_plugins
 
