@@ -69,7 +69,7 @@ IDs.
 ## Running Workflow
 
 The simplest way to run the workflow is to use the scripts and documentation available in the
-slurm directory and pulling from the `feat/slurm` branch.
+slurm directory and pulling from the `develop` branch.
 
 ### Steps
 
