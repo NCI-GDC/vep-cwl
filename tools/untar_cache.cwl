@@ -1,9 +1,6 @@
-#!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
-
-doc: Untar vep archived cache 
-
+class: CommandLineTool
+id: untar_cache
 requirements:
   - class: DockerRequirement
     dockerPull: alpine
@@ -16,8 +13,6 @@ requirements:
   - class: ResourceRequirement
     coresMin: 1
     ramMin: 1024
-
-class: CommandLineTool
 
 inputs:
   cache_dir:

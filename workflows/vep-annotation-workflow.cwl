@@ -1,9 +1,6 @@
-#!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
-
 class: Workflow
-
+id: gdc_vep_annotation_wf
 requirements:
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
@@ -98,60 +95,17 @@ steps:
       caller_id: caller_id
     out: [ output ]
 
-  run_vep:
-    run: ../tools/vep.cwl
+  run_main_vep:
+    run: ./subworkflows/gdc_main_annotation_workflow.cwl
     in:
-      input_file: stage_workflow/input_vcf
-      fasta: stage_workflow/vep_reference
-      dir_cache: stage_workflow/vep_cache
-      shift_hgvs:
-        default: 1
-      failed:
-        default: 1
-      flag_pick_allele:
-        default: true
-      pick_order:
-        default:
-          - canonical
-          - tsl
-          - biotype
-          - rank
-          - ccds
-          - length
-      minimal:
-        default: true
-      tabix:
-        default: true
-      output_file:
-        source: get_filename_prefix/output
-        valueFrom: $(self + '.somatic_annotation.vcf.gz')
-      vcf:
-        default: true 
-      stats_file:
-        source: get_filename_prefix/output
-        valueFrom: $(self + '.somatic_annotation.stats.txt')
-      stats_text:
-        default: true
-      fork: threads 
-      no_progress:
-        default: true
-      everything:
-        default: true
-      xref_refseq:
-        default: true
-      total_length:
-        default: true
-      allele_number:
-        default: true
-      check_alleles:
-        default: true
-      check_existing:
-        default: true
-      assembly:
-        default: "GRCh38" 
-      gdc_entrez: stage_workflow/vep_entrez_json 
-      gdc_evidence: stage_workflow/vep_evidence_vcf 
-    out: [ vep_out, vep_index_out, stats_out_file, warning_out_file ]
+      input_vcf: stage_workflow/input_vcf
+      input_vep_reference: stage_workflow/vep_reference
+      input_vep_cache: stage_workflow/vep_cache
+      output_filename_base: get_filename_prefix/output
+      threads: threads
+      input_vep_entrez_json: stage_workflow/vep_entrez_json
+      input_vep_evidence_vcf: stage_workflow/vep_evidence_vcf
+    out: [ annotated_vcf, annotated_vcf_index, vep_stats, vep_warning ]
 
   upload_vep_vcf:
     run: ./subworkflows/upload_and_emit.cwl
@@ -160,7 +114,7 @@ steps:
       bioclient_load_bucket: bioclient_load_bucket
       upload_prefix: upload_prefix
       job_uuid: job_uuid
-      input_file: run_vep/vep_out 
+      input_file: run_main_vep/annotated_vcf
     out: [ indexd_uuid ]
 
   upload_vep_vcf_index:
@@ -170,7 +124,7 @@ steps:
       bioclient_load_bucket: bioclient_load_bucket
       upload_prefix: upload_prefix
       job_uuid: job_uuid
-      input_file: run_vep/vep_index_out
+      input_file: run_main_vep/annotated_vcf_index
     out: [ indexd_uuid ]
 
   upload_vep_stats:
@@ -180,5 +134,5 @@ steps:
       bioclient_load_bucket: bioclient_load_bucket
       upload_prefix: upload_prefix
       job_uuid: job_uuid
-      input_file: run_vep/stats_out_file
+      input_file: run_main_vep/vep_stats
     out: [ indexd_uuid ]

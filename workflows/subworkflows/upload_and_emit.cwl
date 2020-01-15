@@ -1,13 +1,9 @@
-#!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
-
 class: Workflow
-
+id: gdc_annotation_upload_and_emit_wf
 requirements:
   - class: InlineJavascriptRequirement
   - class: StepInputExpressionRequirement
-  - class: MultipleInputFeatureRequirement
 
 inputs:
   bioclient_config:
@@ -52,5 +48,5 @@ steps:
     in:
       input: upload_file/output
       key:
-        default: 'did' 
+        default: 'did'
     out: [ output ]
