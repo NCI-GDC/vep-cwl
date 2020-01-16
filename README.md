@@ -1,4 +1,5 @@
 # GDC VEP Annotation Workflow 
+![Version badge](https://img.shields.io/badge/VEP-v84-<COLOR>.svg)
 
 This workflow takes a VCF file and adds [Variant Effect Predictor](http://useast.ensembl.org/info/docs/tools/vep/index.html)
 annotations using particular settings for the GDC harmonization process.
