@@ -1,5 +1,4 @@
-VEP Setup
----
+# VEP Setup
 
 We use the VEP
 [Variant Effect Predictor](http://useast.ensembl.org/info/docs/tools/vep/index.html)
