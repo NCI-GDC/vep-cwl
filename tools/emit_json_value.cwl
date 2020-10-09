@@ -1,11 +1,8 @@
-#!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
-
+class: ExpressionTool
+id: emit_json_value
 requirements:
   - class: InlineJavascriptRequirement
-
-class: ExpressionTool
 
 inputs:
   input:
@@ -14,12 +11,10 @@ inputs:
       loadContents: true
       valueFrom: $(null)
 
-  key:
-    type: string
+  key: string
 
 outputs:
-  output:
-    type: string
+  output: string
 
 expression: |
   ${

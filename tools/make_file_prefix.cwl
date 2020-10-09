@@ -1,28 +1,20 @@
-#!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
-
+class: ExpressionTool
+id: make_file_prefix
 requirements:
   - class: InlineJavascriptRequirement
 
-class: ExpressionTool
-
 inputs:
-  project_id:
-    type: string?
+  project_id: string?
 
-  caller_id:
-    type: string?
+  caller_id: string?
 
-  job_id:
-    type: string
+  job_id: string
 
-  experimental_strategy:
-    type: string
+  experimental_strategy: string
 
 outputs:
-  output:
-    type: string
+  output: string
 
 expression: |
   ${

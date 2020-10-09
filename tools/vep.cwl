@@ -1,19 +1,15 @@
-#!/usr/bin/env cwl-runner
-
 class: CommandLineTool
-
 cwlVersion: v1.0
-
+id: vep
 doc: "Runs Variant Effect Predictor v84"
-
 requirements:
   - class: InlineJavascriptRequirement
   - class: ShellCommandRequirement
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/vep-tool:cf9fe1f81b5776f8d0bdbc98ecaf1a8112c0d9ec
+    dockerPull: quay.io/ncigdc/vep-tool:a5b67ebb1410f10f7eef7fae0fc2908565b41d5f
   - class: ResourceRequirement
-    coresMin: "$(inputs.fork ? inputs.fork : 1)" 
-    ramMin: 4096 
+    coresMin: "$(inputs.fork ? inputs.fork : 1)"
+    ramMin: 4096
 
 inputs:
   input_file:

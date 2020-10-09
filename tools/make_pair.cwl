@@ -1,7 +1,6 @@
-#!/usr/bin/env cwl-runner
-
 cwlVersion: v1.0
-
+class: CommandLineTool
+id: make_pair
 requirements:
   - class: DockerRequirement
     dockerPull: alpine
@@ -17,14 +16,9 @@ requirements:
            return ret
        }
 
-class: CommandLineTool
-
 inputs:
-  parent_file:
-    type: File
-
-  children:
-    type: File[]
+  parent_file: File
+  children: File[]
 
 outputs:
   output:
