@@ -11,10 +11,10 @@ inputs:
   project_id:
     type: string?
     doc: GDC project id used for output filenames
-  experimental_strategy: 
+  experimental_strategy:
     type: string
     doc: GDC experimental strategy used for output filenames
-  caller_id: 
+  caller_id:
     type: string
     doc: GDC variant caller id used for output filenames
   bioclient_config:
@@ -25,31 +25,31 @@ inputs:
     doc: Bucket to load files to
   input_vcf_gdc_id:
     type: string
-    doc: input VCF uuid for bioclient 
+    doc: input VCF uuid for bioclient
   input_vcf_index_gdc_id:
     type: string
-    doc: input VCF index uuid for bioclient 
+    doc: input VCF index uuid for bioclient
   input_vep_fasta_gdc_id:
     type: string
-    doc: input VEP fasta uuid for bioclient 
+    doc: input VEP fasta uuid for bioclient
   input_vep_fasta_fai_gdc_id:
     type: string
-    doc: input VEP fasta fai uuid for bioclient 
+    doc: input VEP fasta fai uuid for bioclient
   input_vep_fasta_gzi_gdc_id:
     type: string
-    doc: input VEP fasta gzi uuid for bioclient 
+    doc: input VEP fasta gzi uuid for bioclient
   input_vep_cache_gdc_id:
     type: string
-    doc: input VEP cache tar.gz uuid for bioclient 
+    doc: input VEP cache tar.gz uuid for bioclient
   input_vep_entrez_json_gdc_id:
     type: string
-    doc: input VEP ENTREZ plugin json uuid for bioclient 
+    doc: input VEP ENTREZ plugin json uuid for bioclient
   input_vep_evidence_vcf_gdc_id:
     type: string
-    doc: input VEP evidence VCF uuid for bioclient 
+    doc: input VEP evidence VCF uuid for bioclient
   input_vep_evidence_index_gdc_id:
     type: string
-    doc: input VEP evidence VCF index uuid for bioclient 
+    doc: input VEP evidence VCF index uuid for bioclient
   job_uuid:
     type: string
     doc: uuid for this job
@@ -63,31 +63,31 @@ inputs:
 outputs:
   indexd_vcf_uuid:
     type: string
-    outputSource: upload_vep_vcf/indexd_uuid 
+    outputSource: upload_vep_vcf/indexd_uuid
   indexd_vcf_index_uuid:
     type: string
-    outputSource: upload_vep_vcf_index/indexd_uuid 
+    outputSource: upload_vep_vcf_index/indexd_uuid
   indexd_vep_stats_uuid:
     type: string
-    outputSource: upload_vep_stats/indexd_uuid 
+    outputSource: upload_vep_stats/indexd_uuid
 
 steps:
   stage_workflow:
     run: ./subworkflows/stage.cwl
     in:
       bioclient_config: bioclient_config
-      input_vcf_gdc_id: input_vcf_gdc_id 
-      input_vep_fasta_gdc_id: input_vep_fasta_gdc_id 
-      input_vep_fasta_fai_gdc_id: input_vep_fasta_fai_gdc_id 
-      input_vep_fasta_gzi_gdc_id: input_vep_fasta_gzi_gdc_id 
-      input_vep_cache_gdc_id: input_vep_cache_gdc_id 
-      input_vep_entrez_json_gdc_id: input_vep_entrez_json_gdc_id 
-      input_vep_evidence_vcf_gdc_id: input_vep_evidence_vcf_gdc_id 
-      input_vep_evidence_index_gdc_id: input_vep_evidence_index_gdc_id 
+      input_vcf_gdc_id: input_vcf_gdc_id
+      input_vep_fasta_gdc_id: input_vep_fasta_gdc_id
+      input_vep_fasta_fai_gdc_id: input_vep_fasta_fai_gdc_id
+      input_vep_fasta_gzi_gdc_id: input_vep_fasta_gzi_gdc_id
+      input_vep_cache_gdc_id: input_vep_cache_gdc_id
+      input_vep_entrez_json_gdc_id: input_vep_entrez_json_gdc_id
+      input_vep_evidence_vcf_gdc_id: input_vep_evidence_vcf_gdc_id
+      input_vep_evidence_index_gdc_id: input_vep_evidence_index_gdc_id
     out: [ input_vcf, vep_evidence_vcf, vep_reference, vep_cache, vep_entrez_json ]
 
   get_filename_prefix:
-    run: ../tools/make_file_prefix.cwl
+    run: ../../tools/make_file_prefix.cwl
     in:
       project_id: project_id
       job_id: job_uuid
