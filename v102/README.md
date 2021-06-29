@@ -1,5 +1,5 @@
 # GDC VEP Annotation Workflow
-![Version badge](https://img.shields.io/badge/VEP-v84-<COLOR>.svg)
+![Version badge](https://img.shields.io/badge/VEP-v102-<COLOR>.svg)
 
 This workflow takes a VCF file and adds [Variant Effect Predictor](http://useast.ensembl.org/info/docs/tools/vep/index.html)
 annotations using particular settings for the GDC harmonization process.
@@ -9,7 +9,7 @@ annotations using particular settings for the GDC harmonization process.
 * Tested on [cwltool](https://github.com/common-workflow-language/cwltool) version `1.0.20180306163216`
 * See [GDC Reference Files](https://gdc.cancer.gov/about-data/data-harmonization-and-generation/gdc-reference-files)
 * Plugins and Dockerfile available at https://github.com/NCI-GDC/vep-tool
-* We were using VEP v84 with our customized cache file (see [VEP-SETUP.md](VEP-SETUP.md) for more information).
+* Currently, we are using VEP v102.
 
 ## External Users
 
@@ -22,8 +22,6 @@ The entrypoint CWL workflow for external users is `workflows/subworkflows/gdc_ma
 | `input_vcf` | `File` | VCF file you want to annotate. |
 | `input_vep_reference` | `File` | VEP reference fasta with .fai and .gzi indices |
 | `input_vep_cache` | `Directory` | VEP cache directory |
-| `input_vep_entrez_json` | `File` | Entrez JSON file needed by plugin |
-| `input_vep_evidence_vcf` | `File` | VEP evidence VCF file with tabix index (.tbi) |
 | `output_filename_base` | `string` | Base name to use for all outputs |
 | `threads` | `int?` | Optional number of threads to use for VEP |
 
@@ -55,9 +53,7 @@ The entrypoint CWL workflow for GPAS is `workflows/vep-annotation-workflow.cwl`.
 | `input_vep_fasta_fai_gdc_id` | `string` | the VEP fasta fai uuid |
 | `input_vep_fasta_gzi_gdc_id` | `string` | the VEP fasta gzi uuid |
 | `input_vep_cache_gdc_id` | `string` | the VEP cache tar uuid |
-| `input_vep_entrez_json_gdc_id` | `string` | the entrez JSON mapping file uuid |
-| `input_vep_evidence_vcf_gdc_id` | `string` | the VEP evidence vcf file uuid |
-| `input_vep_evidence_index_gdc_id` | `string` | the VEP evidence vcf index file uuid |
+uuid |
 | `job_uuid` | `string` | the job uuid assigned by GPAS (used in output file names) |
 | `upload_prefix` | `string?` | additional s3 prefix to add if wanted |
 | `threads` | `int?` | number of threads to use for VEP |
