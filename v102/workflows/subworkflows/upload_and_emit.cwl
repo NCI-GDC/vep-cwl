@@ -14,7 +14,7 @@ inputs:
     doc: Bucket to load files to
   upload_prefix:
     type: string?
-    doc: the s3 key prefix 
+    doc: the s3 key prefix
   job_uuid:
     type: string
     doc: the job uuid which will come after the upload_prefix
@@ -29,10 +29,10 @@ outputs:
 
 steps:
   upload_file:
-    run: ../../tools/bio_client_upload_pull_uuid.cwl
+    run: ../../../tools/bio_client_upload_pull_uuid.cwl
     in:
       config_file: bioclient_config
-      local_file: input_file 
+      local_file: input_file
       upload_bucket: bioclient_load_bucket
       upload_key:
         source: [upload_prefix, job_uuid, input_file]
@@ -42,9 +42,9 @@ steps:
              return pfx + self[1] + '/' + self[2].basename
            }
     out: [ output ]
- 
+
   extract_indexd_info:
-    run: ../../tools/emit_json_value.cwl
+    run: ../../../tools/emit_json_value.cwl
     in:
       input: upload_file/output
       key:

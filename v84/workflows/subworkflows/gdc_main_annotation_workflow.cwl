@@ -38,7 +38,7 @@ outputs:
 
 steps:
   run_vep:
-    run: ../../tools/vep.cwl
+    run: ../../vep.cwl
     in:
       input_file: input_vcf
       fasta: input_vep_reference
@@ -65,13 +65,13 @@ steps:
         source: output_filename_base
         valueFrom: $(self + '.somatic_annotation.vcf.gz')
       vcf:
-        default: true 
+        default: true
       stats_file:
         source: output_filename_base
         valueFrom: $(self + '.somatic_annotation.stats.txt')
       stats_text:
         default: true
-      fork: threads 
+      fork: threads
       no_progress:
         default: true
       everything:
@@ -87,7 +87,7 @@ steps:
       check_existing:
         default: true
       assembly:
-        default: "GRCh38" 
+        default: "GRCh38"
       gdc_entrez: input_vep_entrez_json
       gdc_evidence: input_vep_evidence_vcf
     out: [ vep_out, vep_index_out, stats_out_file, warning_out_file ]

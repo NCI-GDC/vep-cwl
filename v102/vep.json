@@ -1,0 +1,23 @@
+{
+    "allele_number": true,
+    "assembly": "GRCh38",
+    "cache_version": 102,
+    "check_existing": true,
+    "compress_output": "bgzip",
+    "dir_cache": {"class": "Directory", "path": "/mnt/SCRATCH/reference/"},
+    "everything": true,
+    "failed": 1,
+    "fork": 8,
+    "input_file": {"class": "File", "path": "/mnt/SCRATCH/tickets/489/input_fsm/0b855842-3b7f-4b36-ad6c-615fe65ac353.wxs.MuTect2.variant_filtration.vcf.gz"},
+    "minimal": true,
+    "output_file": "cwl.test.mutect2.vcf.gz",
+    "pick_order": ["canonical","tsl","biotype","rank","ccds","length"],
+    "shift_hgvs": 1,
+    "stats_text": true,
+    "total_length": true,
+    "vcf": true,
+    "xref_refseq": true,
+    "fasta": {"class": "File", "path": "/mnt/SCRATCH/reference/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"},
+    "flag_pick_allele": true,
+    "stats_file": "cwl.test.mutect2.stats.txt"
+}

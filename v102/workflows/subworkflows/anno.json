@@ -1,0 +1,8 @@
+{
+
+    "input_vep_cache": {"class": "Directory", "path": "/mnt/SCRATCH/reference/"},
+    "input_vcf": {"class": "File", "path": "/mnt/SCRATCH/tickets/489/input_fsm/0b855842-3b7f-4b36-ad6c-615fe65ac353.wxs.MuTect2.variant_filtration.vcf.gz"},
+    "output_filename_base": "cwl.subworkflow.mutect2",
+    "input_vep_reference": {"class": "File", "path": "/mnt/SCRATCH/reference/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz"},
+    "threads": 4
+}
