@@ -20,7 +20,7 @@ expression: |
   ${
 
      function cleanString( rawstring, makeLower ) {
-         var curr = rawstring.replace(" - ", " ").replace(" ", "_").replace("-", "_");
+         var curr = rawstring.replace(" - ", " ").replace(/\s/g, "_").replace("-", "_");
          var res = makeLower ? curr.toLowerCase() : curr;
          return res
      }
