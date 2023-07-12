@@ -1,4 +1,4 @@
-ENTRY_CWL := "vep.cwl"
+ENTRY_CWL := "./workflows/vep-annotation-workflow.cwl"
 
 # Pack and apply Jinja templating. Creates cwl.json file
 # Should be runnable in built docker container

@@ -3,8 +3,7 @@ class: CommandLineTool
 id: bio_client_upload_pull_uuid
 requirements:
   - class: DockerRequirement
-    dockerPull: "{{ docker_repo }}/bio-client:{{ bio_client }}"
-    
+    dockerPull: "{{ docker_repository }}/bio-client:{{ bio_client }}"
   - class: ResourceRequirement
     coresMin: 1
     coresMax: 1
@@ -26,7 +25,7 @@ inputs:
         class: File
         location: /etc/ssl/certs/ca-certificates.crt
 
-  config-file:
+  config_file:
     type: File
     inputBinding:
       prefix: --config-file
@@ -38,19 +37,19 @@ inputs:
     inputBinding:
       position: 1
 
-  upload-bucket:
+  upload_bucket:
     type: string
     inputBinding:
       prefix: --upload-bucket
       position: 2
 
-  upload-key:
+  upload_key:
     type: string
     inputBinding:
       prefix: --upload_key
       position: 3
 
-  input:
+  local_file:
     type: File
     inputBinding:
       position: 99
