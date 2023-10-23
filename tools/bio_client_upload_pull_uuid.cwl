@@ -37,13 +37,13 @@ inputs:
     inputBinding:
       position: 1
 
-  upload-bucket:
+  upload_bucket:
     type: string
     inputBinding:
       prefix: --upload-bucket
       position: 2
 
-  upload-key:
+  upload_key:
     type: string
     inputBinding:
       prefix: --upload_key
