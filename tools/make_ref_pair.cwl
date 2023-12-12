@@ -26,7 +26,7 @@ outputs:
   output:
     type: File
     outputBinding:
-      glob: $(inputs.parent_file.basename)
+      glob: $(inputs.fa_file.basename)
     secondaryFiles: 
       - ^.fai
       - ^.gzi  
