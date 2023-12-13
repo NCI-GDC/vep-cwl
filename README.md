@@ -151,5 +151,4 @@ Each feature branch commit will be published to the internal `dev-containers.osd
 
 Upon merging to `main` or `master`, the image(s) will be published to the permanent `containers.osdc.io` and tagged with both the commit hash and a datetime-stamp.
 
-
 Quay will be depreciated for new workflows and phased out for existing ones.
