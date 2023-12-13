@@ -3,7 +3,7 @@ class: CommandLineTool
 id: make_pair
 requirements:
   - class: DockerRequirement
-    dockerPull: alpine
+    dockerPull: "{{ docker_repo }}/bio-alpine:{{ bio_alpine }}"
   - class: InlineJavascriptRequirement
   - class: InitialWorkDirRequirement
     listing:
