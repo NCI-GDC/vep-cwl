@@ -9,6 +9,10 @@ requirements:
   - class: ResourceRequirement
     coresMin: "$(inputs.fork ? inputs.fork : 1)"
     ramMin: 4096
+  - class: InitialWorkDirRequirement
+    listing:
+      - entry: $(inputs.fasta.path)
+        writable: true
 
 inputs:
   input_file:
