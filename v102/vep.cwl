@@ -11,8 +11,8 @@ requirements:
     ramMin: 4096
   - class: InitialWorkDirRequirement
     listing:
-      - entry: $(inputs.fasta.path)
-        writable: true
+    - entry: $(inputs.fasta.dirname)
+      writable: true
 
 inputs:
   input_file:
