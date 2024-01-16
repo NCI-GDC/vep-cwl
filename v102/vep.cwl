@@ -6,13 +6,6 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
     dockerPull: quay.io/ncigdc/vep-tool:102-6627527
-  - class: ResourceRequirement
-    coresMin: "$(inputs.fork ? inputs.fork : 1)"
-    ramMin: 4096
-  - class: InitialWorkDirRequirement
-    listing:
-    - entry: $(inputs.fasta.dirname)
-      writable: true
 
 inputs:
   input_file:
