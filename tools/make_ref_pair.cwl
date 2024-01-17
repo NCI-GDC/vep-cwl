@@ -28,7 +28,7 @@ outputs:
     outputBinding:
       glob: $(inputs.fa_file.basename)
     secondaryFiles: 
-      - ^.fai
-      - ^.gzi  
+      - .fai
+      - .gzi  
 
 baseCommand: "true"
