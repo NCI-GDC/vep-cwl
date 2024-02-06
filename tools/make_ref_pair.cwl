@@ -7,23 +7,28 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: InitialWorkDirRequirement
     listing:
-      - entryname: $(inputs.parent_file.basename)
-        entry: $(inputs.parent_file)
-      - entryname: $(inputs.children.basename)
-        entry: $(inputs.children)
+      - entryname: $(inputs.fa_file.basename)
+        entry: $(inputs.fa_file)
+      - entryname: $(inputs.gzi_file.basename)
+        entry: $(inputs.gzi_file)
+      - entryname: $(inputs.fai_file.basename)
+        entry: $(inputs.fai_file)
 
 inputs:
-  parent_file: 
+  fa_file: 
     type: File
-  children: 
+  gzi_file: 
+    type: File
+  fai_file:
     type: File
 
 outputs:
   output:
     type: File
     outputBinding:
-      glob: $(inputs.parent_file.basename)
+      glob: $(inputs.fa_file.basename)
     secondaryFiles: 
-      - ^.tbi  
+      - .fai
+      - .gzi  
 
 baseCommand: "true"

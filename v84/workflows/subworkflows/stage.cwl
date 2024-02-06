@@ -107,16 +107,13 @@ steps:
     run: ../../../tools/make_pair.cwl
     in:
       parent_file: extract_evidence_vcf/output
-      children:
-        source: extract_evidence_vcf_index/output
-        valueFrom: $([self])
+      children: extract_evidence_vcf_index/output
     out: [ output ]
 
   make_vep_ref:
-    run: ../../../tools/make_pair.cwl
+    run: ../../../tools/make_ref_pair.cwl
     in:
-      parent_file: extract_fasta/output
-      children:
-        source: [extract_fai/output, extract_gzi/output]
-        valueFrom: $(self)
+      fa_file: extract_fasta/output
+      gzi_file: extract_gzi/output
+      fai_file: extract_fai/output
     out: [ output ]
