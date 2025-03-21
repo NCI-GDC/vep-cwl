@@ -3,12 +3,12 @@ class: CommandLineTool
 id: make_pair
 requirements:
   - class: DockerRequirement
-    dockerPull: alpine
+    dockerPull: "{{ docker_repo }}/bio-alpine:{{ bio_alpine }}"
   - class: InlineJavascriptRequirement
   - class: InitialWorkDirRequirement
     listing:
       - entryname: $(inputs.fa_file.basename)
-        entry: $(inputs.parent_file)
+        entry: $(inputs.fa_file)
       - entryname: $(inputs.gzi_file.basename)
         entry: $(inputs.gzi_file)
       - entryname: $(inputs.fai_file.basename)
@@ -28,7 +28,7 @@ outputs:
     outputBinding:
       glob: $(inputs.fa_file.basename)
     secondaryFiles: 
-      - ^.fai
-      - ^.gzi  
+      - .fai
+      - .gzi  
 
 baseCommand: "true"
