@@ -1,5 +1,6 @@
 {
  "docker_repo": "docker.osdc.io/ncigdc",
  "bio_client": "latest",
- "bio_alpine": "base"
+ "bio_alpine": "base",
+ "tabix": "latest"
 }
