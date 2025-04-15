@@ -4,5 +4,5 @@
   "bio_alpine": "base",
   "bio_client": "latest",
   "vep_tool": "a5b67ebb1410f10f7eef7fae0fc2908565b41d5f",
-  "htslib": "1.21-abb32fb"
+  "htslib": "1.21-e7dc7eb"
 }
