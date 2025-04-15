@@ -5,7 +5,7 @@ doc: "Runs Variant Effect Predictor v102"
 requirements:
   - class: InlineJavascriptRequirement
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/vep-tool:102-6627527
+    dockerPull: "{{ docker_repo }}/vep-tool:{{ vep_tool }}"
 
 inputs:
   input_file:
