@@ -114,6 +114,6 @@ steps:
     run: ../../../tools/make_ref_pair.cwl
     in:
       fa_file: extract_fasta/output
-      gzi_file: extract_gai/output
+      gzi_file: extract_gzi/output
       fai_file: extract_fai/output
     out: [ output ]
