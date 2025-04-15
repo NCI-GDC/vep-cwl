@@ -1,6 +1,7 @@
 {
- "docker_repo": "docker.osdc.io/ncigdc",
- "bio_client": "latest",
- "bio_alpine": "base",
- "tabix": "latest"
+  "docker_repo": "docker.osdc.io/ncigdc",
+  "bio_client": "latest",
+  "bio_alpine": "base",
+  "htslib": "1.21-abb32fb",
+  "vep_tool": "102-6627527"
 }
