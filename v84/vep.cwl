@@ -6,7 +6,7 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ShellCommandRequirement
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/vep-tool:a5b67ebb1410f10f7eef7fae0fc2908565b41d5f
+    dockerPull: "{{ docker_repo }}/vep-tool:{{ vep_tool }}"
   - class: ResourceRequirement
     coresMin: "$(inputs.fork ? inputs.fork : 1)"
     ramMin: 4096
