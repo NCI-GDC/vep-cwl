@@ -5,7 +5,7 @@ requirements:
   - class: InlineJavascriptRequirement
   - class: ShellCommandRequirement
   - class: DockerRequirement
-    dockerPull: quay.io/ncigdc/tabix:latest
+    dockerPull: "{{ docker_repo }}/htslib:{{ htslib }}"
   - class: InitialWorkDirRequirement
     listing:
       - entry: $(inputs.input_file)

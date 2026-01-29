@@ -2,5 +2,7 @@
 	"docker_repo": "docker.osdc.io/ncigdc",
         "docker_repository": "docker.osdc.io/ncigdc",
         "bio_alpine": "base",
-        "bio_client": "latest"
+        "bio_client": "latest",
+        "vep_v84": "a5b67ebb1410f10f7eef7fae0fc2908565b41d5f",
+        "htslib": "1.21-25f007d"
 }
