@@ -38,7 +38,7 @@ outputs:
 
 steps:
   run_vep:
-    run: ../../vep.cwl
+    run: ../../../tools/vep_v84.cwl
     in:
       input_file: input_vcf
       fasta: input_vep_reference

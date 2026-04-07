@@ -1,5 +1,7 @@
 {
  "docker_repo": "docker.osdc.io/ncigdc",
  "bio_client": "latest",
- "bio_alpine": "base"
+ "bio_alpine": "base",
+ "vep_v102": "102-6627527",
+ "htslib": "1.21-25f007d"
 }
