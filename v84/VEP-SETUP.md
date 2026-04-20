@@ -51,7 +51,7 @@ v84 with our customized cache files.
            and should be named 'ensembl_entrez_names.json'):
 
                 # Gencode Entrez Gene IDs file:
-                wget ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_22/gencode.v22.metadata.EntrezGene.gz
+                wget ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_22/gencode.v22.metadata.EntrezGene.gz
                 # NCBI human gene info file:
                 wget ftp://ftp.ncbi.nih.gov/gene/DATA/GENE_INFO/Mammalia/Homo_sapiens.gene_info.gz
                 # Run the make_ensembl_entrez_json.py script in the https://github.com/NCI-GDC/vep-tool/vep-plugins/utils git repo
